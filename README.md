@@ -98,11 +98,12 @@ Kaggle Leaderboard:
 Public: 0.929
 
 Private: 0.906
+
 ---
 ## Author
 
-Atabak Nikouseresht
-FinTech & Risk Analytics
-GitHub: github.com/Atabak-Nikouseresht
-LinkedIn: linkedin.com/in/atabak-nikouseresht
-Email: atabak.nikouseresht@gmail.com
+Atabak Nikouseresht  
+FinTech & Risk Analytics  
+GitHub: github.com/Atabak-Nikouseresht  
+LinkedIn: linkedin.com/in/atabak-nikouseresht  
+Email: atabak.nikouseresht@gmail.com  
