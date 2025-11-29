@@ -102,7 +102,11 @@ Private: 0.906
 Author
 
 Atabak Nikouseresht
+
 FinTech & Risk Analytics
-GitHub: [Link Text](github.com/Atabak-Nikouseresht)
-LinkedIn: [Link Text](linkedin.com/in/atabak-nikouseresht)
+
+GitHub: github.com/Atabak-Nikouseresht
+
+LinkedIn: linkedin.com/in/atabak-nikouseresht
+
 Email: atabak.nikouseresht@gmail.com
