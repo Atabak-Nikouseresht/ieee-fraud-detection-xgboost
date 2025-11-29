@@ -103,6 +103,6 @@ Author
 
 Atabak Nikouseresht
 FinTech & Risk Analytics
-GitHub: github.com/Atabak-Nikouseresht
-LinkedIn: linkedin.com/in/atabak-nikouseresht
+GitHub: [Link Text](github.com/Atabak-Nikouseresht)
+LinkedIn: [Link Text](linkedin.com/in/atabak-nikouseresht)
 Email: atabak.nikouseresht@gmail.com
