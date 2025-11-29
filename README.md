@@ -58,19 +58,20 @@ Please download it manually from the competition page.
 1. Install requirements:
 ```bash
 pip install -r requirements.txt
+```
 
-Open the notebook:
-
+2. Open the notebook:
+```
 jupyter notebook Fraud_Detection_IEEE.ipynb
-
-Place the downloaded Kaggle CSV files in the same directory as the notebook:
-
+```
+3. Place the downloaded Kaggle CSV files in the same directory as the notebook:
+```
 train_transaction.csv
 test_transaction.csv
+```
+4. Run all notebook cells to reproduce training, AUC results, and submission file.
 
-Run all notebook cells to reproduce training, AUC results, and submission file.
-
-🧠 Model Summary
+## Model Summary
 
 Algorithm: XGBoost Classifier
 
