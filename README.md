@@ -42,8 +42,9 @@ Run from the repository root so the notebook's relative CSV paths resolve. The f
 
 - The competition data is not included, so a clean-environment rerun has not been verified from this repository alone.
 - The recorded validation score is from one random stratified split and should not be interpreted as evidence of deployment performance.
+- A lightweight GitHub Actions check validates notebook structure, Python syntax, documented data paths, dependency names, and the recorded local validation result. It does not rerun model training because the competition data is not included.
+- The notebook's original package versions were not recorded, and the direct dependencies remain unpinned; the saved validation output is evidence from the committed notebook, not a claim that a fresh environment reproduces the same score.
 - The README does not claim leaderboard performance without verifiable submission evidence.
-- There are no committed tests, CI workflow, or dependency lockfile.
 
 ## Author
 
