@@ -1,5 +1,7 @@
 # IEEE-CIS Fraud Detection — XGBoost baseline
 
+[![CI](https://github.com/Atabak-Nikouseresht/ieee-fraud-detection-xgboost/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Atabak-Nikouseresht/ieee-fraud-detection-xgboost/actions/workflows/ci.yml)
+
 A notebook-based fraud-classification study using the IEEE-CIS transaction data. It demonstrates categorical preprocessing, a stratified train/validation split, XGBoost training, and ROC-AUC evaluation on an imbalanced dataset.
 
 > **Scope:** This repository contains a notebook and dependency list, not a packaged application. Kaggle competition leaderboard scores previously stated in this README are omitted because no submission record or leaderboard evidence is included here. The committed notebook output records a held-out validation ROC-AUC of **0.9422**; this is a local split result, not a Kaggle leaderboard score.
@@ -38,11 +40,20 @@ The validation result is evidence from the notebook's stored output. Re-running 
 
 Run from the repository root so the notebook's relative CSV paths resolve. The final cells create predictions for the competition test set; a Kaggle submission requires the competition's prescribed format and a separate upload.
 
+## Tests and CI
+
+From the repository root, run the dataset-free checks:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+GitHub Actions runs the same notebook-structure, syntax, data-path, dependency-name, and saved-metric-provenance checks on pushes, pull requests, and manual dispatch. It does not retrain the model without the competition data.
+
 ## Limitations
 
 - The competition data is not included, so a clean-environment rerun has not been verified from this repository alone.
 - The recorded validation score is from one random stratified split and should not be interpreted as evidence of deployment performance.
-- A lightweight GitHub Actions check validates notebook structure, Python syntax, documented data paths, dependency names, and the recorded local validation result. It does not rerun model training because the competition data is not included.
 - The notebook's original package versions were not recorded, and the direct dependencies remain unpinned; the saved validation output is evidence from the committed notebook, not a claim that a fresh environment reproduces the same score.
 - The README does not claim leaderboard performance without verifiable submission evidence.
 
