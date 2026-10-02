@@ -1,4 +1,4 @@
-name: Notebook validation
+name: Reproducibility checks
 
 on:
   push:
@@ -18,7 +18,21 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: "3.11.16"
-      - name: Install project requirements
-        run: python -m pip install -r requirements.txt
-      - name: Validate notebook and portfolio evidence
-        run: python -m unittest discover -s tests -v
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+      - name: Install locked runtime and notebook dependencies
+        run: uv sync --locked --no-dev --extra notebook
+      - name: Verify Python and direct dependency versions
+        run: uv run --no-sync python scripts/verify_environment.py
+      - name: Check installed dependency consistency
+        run: uv run --with pip --no-sync python -m pip check
+      - name: Test notebook contract and production smoke path
+        run: uv run --no-sync python -m unittest discover -s tests -v
+      - name: Compile Python sources
+        run: uv run --no-sync python -m compileall -q fraud_detection.py scripts tests
+      - name: Export all locked dependencies for audit
+        run: uv export --locked --no-dev --extra notebook --no-emit-project --output-file $RUNNER_TEMP/requirements-audit.txt
+      - name: Audit runtime and notebook dependencies
+        run: uvx --from pip-audit pip-audit -r $RUNNER_TEMP/requirements-audit.txt

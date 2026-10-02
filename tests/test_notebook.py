@@ -6,10 +6,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OrdinalEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import average_precision_score, roc_auc_score
 from xgboost import XGBClassifier
 
 
@@ -53,27 +51,29 @@ class NotebookPortfolioChecks(unittest.TestCase):
     def test_documented_dataset_inputs_match_notebook(self):
         self.assertIn('pd.read_csv("train_transaction.csv")', self.sources)
         self.assertIn('pd.read_csv("test_transaction.csv")', self.sources)
-        self.assertIn("place `train_transaction.csv` and `test_transaction.csv` beside the notebook", self.readme)
+        self.assertIn("validate_competition_frames(train, test)", self.sources)
+        self.assertIn("Put `train_transaction.csv` and `test_transaction.csv` in the repository root", self.readme)
         self.assertFalse((REPOSITORY / "train_transaction.csv").exists())
         self.assertFalse((REPOSITORY / "test_transaction.csv").exists())
+        self.assertFalse((REPOSITORY / "train_identity.csv").exists())
+        self.assertFalse((REPOSITORY / "test_identity.csv").exists())
 
     def test_stale_validation_output_is_not_presented_as_current_evidence(self):
         self.assertEqual(self.outputs.strip(), "")
-        self.assertIn("historical saved validation ROC-AUC", self.readme)
+        self.assertIn("historical ROC-AUC", self.readme)
         self.assertIn("previous preprocessing workflow", self.readme)
-        self.assertIn("No corrected validation score", self.readme)
+        self.assertIn("No corrected full-data metric", self.readme)
 
     def test_readme_does_not_claim_competition_leaderboard_score(self):
         self.assertNotRegex(self.readme, re.compile(r"(?:public|private)\s+(?:leaderboard\s+)?score\s*[:=]\s*\d", re.I))
 
     def test_requirements_cover_direct_external_imports(self):
         requirements = {
-            line.split("#", 1)[0].strip().lower().replace("_", "-")
+            line.split("==", 1)[0].split(";", 1)[0].strip().lower().replace("_", "-")
             for line in (REPOSITORY / "requirements.txt").read_text(encoding="utf-8").splitlines()
-            if line.strip() and not line.lstrip().startswith("#")
+            if "==" in line and not line.lstrip().startswith("#")
         }
         mapping = {
-            "matplotlib": "matplotlib",
             "numpy": "numpy",
             "pandas": "pandas",
             "sklearn": "scikit-learn",
@@ -84,12 +84,47 @@ class NotebookPortfolioChecks(unittest.TestCase):
                 self.assertIn(distribution, requirements)
 
     def test_training_uses_train_fitted_categorical_preprocessing(self):
+        self.assertIn("build_preprocessor(data.feature_columns, data.categorical_columns)", self.sources)
         self.assertIn("preprocessor.fit_transform(X_train)", self.sources)
         self.assertIn("preprocessor.transform(X_val)", self.sources)
         self.assertIn("preprocessor.transform(test_features)", self.sources)
-        self.assertIn("handle_unknown=\"use_encoded_value\"", self.sources)
-        self.assertIn("unknown_value=-1", self.sources)
-        self.assertNotIn(".cat.codes", self.sources)
+        production = (REPOSITORY / "fraud_detection.py").read_text(encoding="utf-8")
+        self.assertIn('handle_unknown="use_encoded_value"', production)
+        self.assertIn("unknown_value=-1", production)
+        self.assertNotIn(".cat.codes", self.sources + production)
+
+    def test_production_pipeline_smoke_reaches_xgboost_predictions_and_metrics(self):
+        from fraud_detection import build_preprocessor, validate_competition_frames
+
+        train = pd.DataFrame({
+            "TransactionID": range(8),
+            "isFraud": [0, 1, 0, 1, 0, 1, 0, 1],
+            "amount": [1.0, np.nan, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
+            "kind": ["A", "B", "A", None, "C", "B", "A", "C"],
+        })
+        test = pd.DataFrame({"TransactionID": [8, 9], "amount": [9.0, 10.0], "kind": ["new", "A"]})
+        data = validate_competition_frames(train, test)
+        X_train, X_val, y_train, y_val = train_test_split(
+            data.train_features, data.target, test_size=0.25,
+            stratify=data.target, random_state=42,
+        )
+        preprocessor = build_preprocessor(data.feature_columns, data.categorical_columns)
+        train_matrix = preprocessor.fit_transform(X_train)
+        validation_matrix = preprocessor.transform(X_val)
+        test_matrix = preprocessor.transform(data.test_features)
+        model = XGBClassifier(
+            n_estimators=5, max_depth=2, learning_rate=0.1, n_jobs=1,
+            random_state=42, eval_metric="logloss", verbosity=0,
+        )
+        model.fit(train_matrix, y_train)
+        labels = model.predict(validation_matrix)
+        probabilities = model.predict_proba(validation_matrix)[:, 1]
+        self.assertEqual(labels.shape, (len(y_val),))
+        self.assertEqual(probabilities.shape, (len(y_val),))
+        self.assertTrue(np.isfinite(probabilities).all())
+        self.assertTrue(np.isfinite(roc_auc_score(y_val, probabilities)))
+        self.assertTrue(np.isfinite(average_precision_score(y_val, probabilities)))
+        self.assertEqual(model.predict_proba(test_matrix).shape, (len(test), 2))
 
     def test_split_is_deterministic_and_metrics_are_contextualized(self):
         self.assertIn("random_state=42", self.sources)
@@ -101,56 +136,6 @@ class NotebookPortfolioChecks(unittest.TestCase):
         )
         self.assertIn("validation", markdown.lower())
         self.assertIn("ROC-AUC", markdown)
-
-    def test_train_fitted_ordinal_preprocessor_runs_with_real_xgboost(self):
-        preprocessing_source = next(
-            source for source in self.code_cells
-            if "preprocessor = ColumnTransformer(" in source
-        )
-        X_train = pd.DataFrame({
-            "amount": [10.0, np.nan, 30.0, 40.0, 50.0, 60.0],
-            "kind": ["A", "B", "A", None, "C", "B"],
-        })
-        X_val = pd.DataFrame({"amount": [20.0], "kind": ["never-seen"]})
-        test_features = pd.DataFrame({"amount": [40.0], "kind": ["also-new"]})
-        namespace = {
-            "np": np,
-            "X_train": X_train,
-            "X_val": X_val,
-            "test_features": test_features,
-            "ColumnTransformer": ColumnTransformer,
-            "SimpleImputer": SimpleImputer,
-            "Pipeline": Pipeline,
-            "OrdinalEncoder": OrdinalEncoder,
-        }
-
-        exec(compile(preprocessing_source, str(NOTEBOOK), "exec"), namespace)
-
-        encoded_train = namespace["X_train_processed"]
-        encoded_validation = namespace["X_val_processed"]
-        encoded_test = namespace["test_processed"]
-        self.assertIsInstance(encoded_train, np.ndarray)
-        self.assertEqual(encoded_train.shape, (len(X_train), len(X_train.columns)))
-        self.assertEqual(encoded_train.shape[1], encoded_validation.shape[1])
-        self.assertEqual(encoded_train.shape[1], encoded_test.shape[1])
-        encoder = namespace["preprocessor"].named_transformers_["categorical"].named_steps["ordinal"]
-        self.assertEqual(encoder.categories_[0].tolist(), ["A", "B", "C"])
-        self.assertEqual(encoded_validation[0, 1], -1)
-
-        model = XGBClassifier(
-            n_estimators=5,
-            max_depth=2,
-            learning_rate=0.1,
-            n_jobs=1,
-            random_state=42,
-            eval_metric="logloss",
-            verbosity=0,
-        )
-        model.fit(encoded_train, [0, 1, 0, 1, 0, 1])
-        self.assertEqual(model.predict(encoded_validation).shape, (1,))
-        probabilities = model.predict_proba(encoded_test)
-        self.assertEqual(probabilities.shape, (1, 2))
-        self.assertTrue(np.isfinite(probabilities).all())
 
     def test_early_stopping_callback_is_not_imported_unused(self):
         self.assertNotIn("EarlyStopping", self.sources)
