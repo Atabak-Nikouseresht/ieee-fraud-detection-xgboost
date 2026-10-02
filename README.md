@@ -31,7 +31,7 @@ Install Python **3.11.16** (the exact version is recorded in `.python-version`) 
 ```bash
 uv sync --locked --no-dev
 uv run --no-sync python scripts/verify_environment.py
-uv run --no-sync python -m pip check
+uv run --with pip --no-sync python -m pip check
 ```
 
 `uv.lock` contains exact versions and hashes for all resolved packages across supported platforms. `pyproject.toml` pins direct runtime dependencies; `requirements.txt` is a generated pip-compatible export. To refresh dependencies intentionally, edit direct pins, run `uv lock`, regenerate with `uv export --locked --no-dev --format requirements-txt --no-emit-project -o requirements.txt`, then audit and test the full lock. Do not update only one of these files.
@@ -51,7 +51,7 @@ uv run --no-sync python -m compileall -q fraud_detection.py scripts tests
 uvx pip-audit -r requirements.txt
 ```
 
-The dataset-free tests exercise the actual validation and preprocessing module through XGBoost fit, predict, predict-proba, and held-out metrics. They also check notebook JSON and Python syntax, saved-output provenance, the data contract, and direct dependency coverage. CI installs only the locked runtime environment, checks dependency consistency, runs the tests and syntax compilation, and audits the resolved requirements. It does not train on the unavailable competition data.
+The dataset-free tests exercise the actual validation and preprocessing module through XGBoost fit, predict, predict-proba, and held-out metrics. They also check notebook JSON and Python syntax, saved-output provenance, the data contract, and direct dependency coverage. CI installs the locked runtime and notebook extra, checks dependency consistency, runs tests and syntax compilation, and audits the full resolved environment. It does not train on the unavailable competition data.
 
 ## Limitations
 
