@@ -30,8 +30,10 @@ jobs:
         run: uv run --with pip --no-sync python -m pip check
       - name: Test notebook contract and production smoke path
         run: uv run --no-sync python -m unittest discover -s tests -v
+      - name: Validate aggregate result/status schema (not full-data completion)
+        run: uv run --no-sync python scripts/validate_results.py
       - name: Compile Python sources
-        run: uv run --no-sync python -m compileall -q fraud_detection.py scripts tests
+        run: uv run --no-sync python -m compileall -q fraud_detection.py evaluation.py scripts tests
       - name: Export all locked dependencies for audit
         run: uv export --locked --no-dev --extra notebook --no-emit-project --output-file $RUNNER_TEMP/requirements-audit.txt
       - name: Audit runtime and notebook dependencies

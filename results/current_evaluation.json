@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "blocked",
+  "dataset_kind": "ieee",
+  "publication_status": "BLOCKED ON DATA",
+  "created_at_utc": "2026-10-02T22:31:17.226888+00:00",
+  "reason": "Missing local required files: train_transaction.csv, test_transaction.csv",
+  "expectations": {
+    "required_files": [
+      "train_transaction.csv",
+      "test_transaction.csv"
+    ],
+    "real_run_acknowledgment_required": true,
+    "full_train_no_sampling": true,
+    "default_split": "temporal pending TransactionDT inspection"
+  },
+  "provenance": {
+    "captured_at_utc": "2026-10-02T22:31:17.280024+00:00",
+    "git_sha": "6fb830c1e4f600b3d7b8976835de58f7c339c701",
+    "worktree_clean": true,
+    "worktree_dirty": false,
+    "python": "3.11.16",
+    "versions": {
+      "numpy": "2.4.6",
+      "pandas": "3.0.6",
+      "scikit-learn": "1.9.1",
+      "xgboost": "3.2.0"
+    },
+    "source_sha256": {
+      "evaluation.py": "bd1fbf05c98c79016036bf774fcaf7dcd2fc8083364745d36ffb8873c49f1b35",
+      "fraud_detection.py": "95d1146b9f0ad7588e1023d33ca59a05b4eb6c376a4f544e5be4b74c73c1edaa"
+    },
+    "data_sha256": {
+      "train_transaction.csv": null,
+      "test_transaction.csv": null
+    }
+  },
+  "row_counts": null,
+  "metrics": null,
+  "split": null,
+  "calibration": null,
+  "importance": null,
+  "bootstrap": null
+}
