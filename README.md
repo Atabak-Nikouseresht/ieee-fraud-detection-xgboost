@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/Atabak-Nikouseresht/ieee-fraud-detection-xgboost/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Atabak-Nikouseresht/ieee-fraud-detection-xgboost/actions/workflows/ci.yml)
 
-A notebook-based fraud-classification study using the IEEE-CIS transaction data. It demonstrates categorical preprocessing, a stratified train/validation split, XGBoost training, and ROC-AUC evaluation on an imbalanced dataset.
+A notebook-based fraud-classification study using the IEEE-CIS transaction data. It demonstrates a stratified train/validation split, training-only categorical preprocessing, XGBoost training, and held-out evaluation using ROC-AUC, average precision, threshold-based precision/recall/F1, and a confusion matrix.
 
-> **Scope:** This repository contains a notebook and dependency list, not a packaged application. Kaggle competition leaderboard scores previously stated in this README are omitted because no submission record or leaderboard evidence is included here. The committed notebook output records a held-out validation ROC-AUC of **0.9422**; this is a local split result, not a Kaggle leaderboard score.
+> **Scope:** This repository contains a notebook and dependency list, not a packaged application. The historical saved validation ROC-AUC of `0.9421992865326172` was produced by the previous preprocessing workflow; its saved notebook outputs were cleared and it is not a result of the corrected methodology. No corrected validation score or Kaggle leaderboard score is claimed; a fresh run requires the original competition files and compatible package versions.
 
 ## What is included
 
@@ -13,9 +13,9 @@ A notebook-based fraud-classification study using the IEEE-CIS transaction data.
 
 ## Method at a glance
 
-The notebook reads `train_transaction.csv` and `test_transaction.csv` from the working directory, separates the `isFraud` target, encodes categorical columns, and uses an 80/20 stratified split with `random_state=42`. The XGBoost model uses 500 estimators, depth 6, learning rate 0.05, row and column subsampling of 0.8, and ROC-AUC as its evaluation metric. The saved notebook output reports 472,432 training rows, 118,108 validation rows, and ROC-AUC 0.942199 on the validation split.
+The notebook reads `train_transaction.csv` and `test_transaction.csv` from the working directory, separates the `isFraud` target, and uses an 80/20 stratified split with `random_state=42`. Missing numerical values are imputed with training-partition medians; missing categorical values are imputed with training-partition most-frequent values and then ordinal encoded by a preprocessor fitted only on the training partition. Unseen validation/test values map to `-1`. This fixed-width encoding avoids expanding the matrix by category cardinality; integer codes are compact tree inputs and do not represent a natural or economic ordering. The XGBoost model uses 500 estimators, depth 6, learning rate 0.05, row and column subsampling of 0.8, and ROC-AUC as its evaluation metric.
 
-The validation result is evidence from the notebook's stored output. Re-running may require the original competition files and compatible package versions; this repository does not include the dataset or a dependency lockfile.
+ROC-AUC, average precision, and threshold-based precision/recall/F1 plus confusion matrix are computed on the held-out validation split only. The 0.5 threshold is descriptive, not optimized for a real operating cost. These are not Kaggle leaderboard scores or evidence of deployment performance. No corrected metric is stated until the repaired notebook is run against the competition data.
 
 ## Reproduce the notebook
 
@@ -48,14 +48,14 @@ From the repository root, run the dataset-free checks:
 python -m unittest discover -s tests -v
 ```
 
-GitHub Actions runs the same notebook-structure, syntax, data-path, dependency-name, and saved-metric-provenance checks on pushes, pull requests, and manual dispatch. It does not retrain the model without the competition data.
+GitHub Actions runs the same notebook-structure, syntax, data-path, dependency-name, and saved-output-provenance checks on pushes, pull requests, and manual dispatch. It does not retrain the model without the competition data.
 
 ## Limitations
 
-- The competition data is not included, so a clean-environment rerun has not been verified from this repository alone.
-- The recorded validation score is from one random stratified split and should not be interpreted as evidence of deployment performance.
-- The notebook's original package versions were not recorded, and the direct dependencies remain unpinned; the saved validation output is evidence from the committed notebook, not a claim that a fresh environment reproduces the same score.
-- The README does not claim leaderboard performance without verifiable submission evidence.
+- The competition data is not included, so a clean-environment training rerun has not been verified from this repository alone.
+- The validation ROC-AUC has not been recomputed after the preprocessing repair; no score is presented as current evidence.
+- The notebook's original package versions were not recorded, and direct dependencies remain unpinned.
+- The reported model configuration is a baseline, not evidence of deployment performance.
 
 ## Author
 
