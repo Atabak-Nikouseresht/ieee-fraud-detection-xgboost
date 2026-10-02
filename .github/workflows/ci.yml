@@ -22,8 +22,8 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      - name: Install locked runtime dependencies
-        run: uv sync --locked --no-dev
+      - name: Install locked runtime and notebook dependencies
+        run: uv sync --locked --no-dev --extra notebook
       - name: Verify Python and direct dependency versions
         run: uv run --no-sync python scripts/verify_environment.py
       - name: Check installed dependency consistency

@@ -36,10 +36,10 @@ uv run --no-sync python -m pip check
 
 `uv.lock` contains exact versions and hashes for all resolved packages across supported platforms. `pyproject.toml` pins direct runtime dependencies; `requirements.txt` is a generated pip-compatible export. To refresh dependencies intentionally, edit direct pins, run `uv lock`, regenerate with `uv export --locked --no-dev --format requirements-txt --no-emit-project -o requirements.txt`, then audit and test the full lock. Do not update only one of these files.
 
-To run the notebook, install Jupyter separately in a notebook-capable environment (it is an authoring tool, not a model runtime dependency), then launch from the repository root:
+To run the notebook, install the pinned notebook extra, then launch from the repository root:
 
 ```bash
-uv pip install jupyter
+uv sync --locked --extra notebook
 uv run --no-sync jupyter notebook Fraud_Detection_IEEE.ipynb
 ```
 

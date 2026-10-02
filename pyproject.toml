@@ -10,5 +10,11 @@ dependencies = [
     "xgboost==3.2.0",
 ]
 
+[project.optional-dependencies]
+notebook = [
+    "ipykernel==7.3.0",
+    "notebook==7.6.3",
+]
+
 [tool.uv]
 package = false
