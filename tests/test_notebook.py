@@ -49,20 +49,24 @@ class NotebookPortfolioChecks(unittest.TestCase):
             ast.parse(source, filename=f"notebook-cell-{number}")
 
     def test_documented_dataset_inputs_match_notebook(self):
-        self.assertIn('pd.read_csv("train_transaction.csv")', self.sources)
-        self.assertIn('pd.read_csv("test_transaction.csv")', self.sources)
-        self.assertIn("validate_competition_frames(train, test)", self.sources)
-        self.assertIn("Put `train_transaction.csv` and `test_transaction.csv` in the repository root", self.readme)
+        self.assertIn('results/current_evaluation.json', self.sources)
+        self.assertIn('validate_result(result)', self.sources)
+        self.assertNotIn('pd.read_csv', self.sources)
+        self.assertIn('outside the repository', self.readme)
         self.assertFalse((REPOSITORY / "train_transaction.csv").exists())
         self.assertFalse((REPOSITORY / "test_transaction.csv").exists())
         self.assertFalse((REPOSITORY / "train_identity.csv").exists())
         self.assertFalse((REPOSITORY / "test_identity.csv").exists())
 
     def test_stale_validation_output_is_not_presented_as_current_evidence(self):
-        self.assertEqual(self.outputs.strip(), "")
+        result = json.loads((REPOSITORY / 'results/current_evaluation.json').read_text())
+        self.assertNotIn('0.9421992865326172', self.outputs)
+        for metrics in result['metrics'].values():
+            self.assertIn(f"{metrics['roc_auc']:.6f}", self.outputs)
+            self.assertIn(f"{metrics['average_precision']:.6f}", self.outputs)
         self.assertIn("historical ROC-AUC", self.readme)
         self.assertIn("previous preprocessing workflow", self.readme)
-        self.assertIn("No corrected full-data metric", self.readme)
+        self.assertIn("Current corrected evaluation", self.readme)
 
     def test_readme_does_not_claim_competition_leaderboard_score(self):
         self.assertNotRegex(self.readme, re.compile(r"(?:public|private)\s+(?:leaderboard\s+)?score\s*[:=]\s*\d", re.I))
@@ -84,10 +88,11 @@ class NotebookPortfolioChecks(unittest.TestCase):
                 self.assertIn(distribution, requirements)
 
     def test_training_uses_train_fitted_categorical_preprocessing(self):
-        self.assertIn("build_preprocessor(data.feature_columns, data.categorical_columns)", self.sources)
-        self.assertIn("preprocessor.fit_transform(X_train)", self.sources)
-        self.assertIn("preprocessor.transform(X_val)", self.sources)
-        self.assertIn("preprocessor.transform(test_features)", self.sources)
+        runner = (REPOSITORY / 'evaluation.py').read_text(encoding='utf-8')
+        self.assertIn('preprocessor.fit_transform(features.iloc[a])', runner)
+        self.assertIn('preprocessor.transform(features.iloc[b])', runner)
+        self.assertIn('preprocessor.transform(features.iloc[c])', runner)
+        self.assertNotIn('.fit(', self.sources)
         production = (REPOSITORY / "fraud_detection.py").read_text(encoding="utf-8")
         self.assertIn('handle_unknown="use_encoded_value"', production)
         self.assertIn("unknown_value=-1", production)
@@ -127,8 +132,11 @@ class NotebookPortfolioChecks(unittest.TestCase):
         self.assertEqual(model.predict_proba(test_matrix).shape, (len(test), 2))
 
     def test_split_is_deterministic_and_metrics_are_contextualized(self):
-        self.assertIn("random_state=42", self.sources)
-        self.assertIn("roc_auc_score(y_val, val_preds)", self.sources)
+        runner = (REPOSITORY / 'evaluation.py').read_text()
+        self.assertIn('random_state=42', runner)
+        self.assertIn('strict', self.readme.lower())
+        self.assertIn('temporal', self.readme.lower())
+        self.assertIn('review_budgets', self.sources)
         markdown = "\n".join(
             "".join(cell.get("source", []))
             for cell in self.notebook.get("cells", [])

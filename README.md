@@ -1,64 +1,94 @@
-# IEEE-CIS Fraud Detection — XGBoost baseline
+# IEEE-CIS Fraud Detection — temporal baseline comparison
 
 [![CI](https://github.com/Atabak-Nikouseresht/ieee-fraud-detection-xgboost/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Atabak-Nikouseresht/ieee-fraud-detection-xgboost/actions/workflows/ci.yml)
 
-A notebook-based fraud-classification study using IEEE-CIS transaction data. The notebook demonstrates a stratified train/validation split, training-only preprocessing, XGBoost training, and held-out ROC-AUC, average precision, threshold-based precision/recall/F1, and confusion matrix.
+A completed transaction-only, chronological fraud-classification study comparing fixed Logistic Regression and XGBoost. Restricted source data stays outside Git; the notebook presents aggregate evidence from the actual run, not another training workflow.
 
-> **Evidence:** The historical ROC-AUC `0.9421992865326172` belongs to the previous preprocessing workflow. Notebook outputs are cleared; that value is not a result of the corrected workflow. No corrected full-data metric or Kaggle leaderboard score is claimed. The competition dataset is not included.
+## Current corrected evaluation
 
-## Included files
+Full labeled transaction CSV: **590,540 rows**, **392 predictors**, **20,663 frauds** (3.499001%). Primary split: earliest **354,324** model-training rows, next **118,108** calibration rows, latest **118,108** final evaluation rows. All time boundaries are strict; no timestamp ties cross them.
 
-- `Fraud_Detection_IEEE.ipynb` — data validation, preparation, training, validation, and submission-file workflow.
-- `fraud_detection.py` — shared transaction-table contract and production preprocessing used by the notebook and dataset-free smoke tests.
-- `pyproject.toml` and `uv.lock` — direct dependencies and a cross-platform, fully resolved lock.
-- `requirements.txt` — generated, hash-pinned export of the runtime lock for pip-based consumers; regenerate it from `uv.lock`, do not hand-edit it.
-- `.python-version` — exact interpreter patch version used for this reproducibility baseline.
+| Model | ROC-AUC | Average Precision (AP) |
+|---|---|---|
+| Logistic Regression | 0.805437 | 0.173031 |
+| XGBoost | 0.887546 | 0.480197 |
 
-## Method and input contract
+Reported metrics are rounded to **6 decimal places** from [the authoritative JSON](results/current_evaluation.json); AP is the precision-recall summary, not every trapezoidal PR-area definition.
 
-The notebook reads `train_transaction.csv` and `test_transaction.csv` from the repository root. It requires `TransactionID` in both tables and `isFraud` in training only; IDs must be present and unique, the target must contain only 0/1, and train/test predictor columns must match (column order may differ). It models the transaction table only. The optional `train_identity.csv` and `test_identity.csv` competition files are neither required nor merged; identity features are outside this baseline's scope.
+At the fixed top-1% review budget, XGBoost generates **1,182 alerts**, captures **1,029 frauds**, and yields **0.870558 precision** and **0.253199 recall**. These are offline batch scenarios, not validated staffing policies or loss savings. The linear baseline performs poorly at the tightest budgets despite its overall ROC-AUC; this is reported rather than tuned away.
 
-After validation, the notebook separates the target and IDs, then makes an 80/20 stratified split using `random_state=42`. Median numerical imputation and most-frequent categorical imputation plus ordinal encoding are fitted only on the training partition. Unseen validation/test categories map to `-1`. The fixed-width integer codes are compact tree inputs, not meaningful category rankings. XGBoost uses 500 estimators, depth 6, learning rate 0.05, row/column subsampling of 0.8, and ROC-AUC as its evaluation metric.
+XGBoost final Brier = **0.023365**, log loss = **0.097501**, quantile-bin ECE = **0.004580**. Calibration-partition ECE was **0.005008**, below the predeclared **0.02** trigger, so sigmoid was **not fitted**. Low overall ECE does not certify high-risk or production calibration.
 
-Metrics are computed on the held-out validation split; threshold 0.5 is descriptive and is not tuned to a real operating cost. The final notebook cell writes `submission.csv` only when the notebook is run; no model or generated output is committed.
+**Main limitation:** anonymized feature decision-time availability and label maturation remain uncertain; repeated card-attribute proxies can occur across temporal boundaries. This is a retrospective temporal benchmark, not deployment or unseen-customer validation.
+
+See [full current tables and interpretation](results/current_evaluation.md), [the analytical notebook](Fraud_Detection_IEEE.ipynb), and [the predeclared protocol](docs/phase2-evaluation.md).
+
+## Historical results — separate evidence
+
+The historical ROC-AUC `0.9421992865326172` belongs to the **previous preprocessing workflow**, not this corrected evaluation. Its validation conditions differ, so it is not an apples-to-apples temporal comparison. The historical ROC-AUC is retained, while the lower current result is published without score-recovery tuning. No Kaggle leaderboard score is claimed. Earlier notebook code remains in Git history; current notebook outputs replay the current aggregate artifact only.
+
+## Method and data contract
+
+`evaluation.py` reads external `train_transaction.csv` and `test_transaction.csv`. `TransactionID` is excluded from predictors; `isFraud` is training-only. Unique/nonmissing IDs, binary target, matching predictor schemas, disjoint train/test IDs, suspicious outcome names and exact target/ID copies are checked. The unlabeled competition test table (506,691 rows) supplies contract/provenance checks, not performance labels.
+
+The model-training / calibration / final-evaluation design is approximately 60/20/20 chronologically by `TransactionDT`. A random stratified option is implemented but not selected for its score. No unverified card-tuple entity grouping or identity-table merge is used.
+
+Existing numeric median imputation and categorical imputation/ordinal encoding are fitted only on model-training rows; unseen categories map to -1. Logistic Regression also uses training-only scaling (C=1, max_iter=1000, seed 42). Ordinal nominal geometry and dtype-based numeric card codes limit the linear comparator; it is not an optimized one-hot baseline.
+
+XGBoost retains 500 estimators, depth 6, learning rate 0.05, row/column subsampling 0.8, histogram method, seed 42 and four CPU threads. No broad tuning, identity enrichment or alternate-score selection was performed. Calibration selection precedes final metrics. Full-file label validation occurs earlier: this is not a physically sealed-label holdout.
+
+## Included evidence and source
+
+- `evaluation.py` — the full-data evaluation entry point, provenance capture and evidence publication gates.
+- `fraud_detection.py` — unchanged shared data contract and train-fitted preprocessing.
+- `results/current_evaluation.json` — full-precision current metrics, source/data hashes, splits, parameters and limitations.
+- `results/current_evaluation.md` — human-readable current results and interview answers.
+- `Fraud_Detection_IEEE.ipynb` — executed compact analytical narrative from the aggregate result artifact; no raw rows or retraining.
+- `docs/phase2-evaluation.md` — methodology, access conditions and reproduction procedure.
+- `pyproject.toml`, `uv.lock`, `requirements.txt`, `.python-version` — existing locked environment and generated hash-pinned runtime export.
 
 ## Reproduce
 
-Access the original data through the [IEEE-CIS Fraud Detection competition](https://www.kaggle.com/competitions/ieee-fraud-detection/data) and follow its access and use terms. The data is not redistributed here. Put `train_transaction.csv` and `test_transaction.csv` in the repository root. Identity CSVs are not needed by this implementation.
+Obtain the original files through the [IEEE-CIS competition](https://www.kaggle.com/competitions/ieee-fraud-detection/data), following its access/use/publication conditions. Keep both transaction CSVs **outside the repository**. `train_identity.csv`, `test_identity.csv` and `sample_submission.csv` are deliberately unused.
 
-Install Python **3.11.16** (the exact version is recorded in `.python-version`) and [uv](https://docs.astral.sh/uv/):
+Use Python **3.11.16** and the existing uv lock:
 
 ```bash
-uv sync --locked --no-dev
+uv sync --locked --no-dev --extra notebook
 uv run --no-sync python scripts/verify_environment.py
 uv run --with pip --no-sync python -m pip check
+OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4 OMP_NUM_THREADS=4 uv run --no-sync python evaluation.py --data-dir /path/to/authorized/ieee --output /path/to/new_evaluation.json --split temporal --n-jobs 4 --bootstrap-replicates 0 --acknowledge-uncertain-feature-timing
+uv run --no-sync python scripts/validate_results.py /path/to/new_evaluation.json
 ```
 
-`uv.lock` contains exact versions and hashes for all resolved packages across supported platforms. `pyproject.toml` pins direct runtime dependencies; `requirements.txt` is a generated pip-compatible export. To refresh dependencies intentionally, edit direct pins, run `uv lock`, regenerate with `uv export --locked --no-dev --format requirements-txt --no-emit-project -o requirements.txt`, then audit and test the full lock. Do not update only one of these files.
+The environment-variable prefix is Bash syntax; use equivalent shell-specific syntax elsewhere. Choose a **new output filename**: completed evidence cannot be overwritten. The actual run used the full supplied dataset, took **204.817 seconds**, and produced no warnings; runtime and memory vary by host. Exact execution revision: `7148defa53109f6e47cc6993d6fbc4bd55d9c3ef`. Hashes identify bytes, not legal permission or independently signed official authenticity.
 
-To run the notebook, install the pinned notebook extra, then launch from the repository root:
+To inspect or replay the notebook's aggregate outputs:
 
 ```bash
-uv sync --locked --extra notebook
 uv run --no-sync jupyter notebook Fraud_Detection_IEEE.ipynb
 ```
 
-## Tests and security audit
+## Tests and CI
 
 ```bash
 uv run --no-sync python -m unittest discover -s tests -v
-uv run --no-sync python -m compileall -q fraud_detection.py scripts tests
+uv run --no-sync python scripts/validate_results.py
+uv run --no-sync python -m compileall -q fraud_detection.py evaluation.py scripts tests
 uvx pip-audit -r requirements.txt
 ```
 
-The dataset-free tests exercise the actual validation and preprocessing module through XGBoost fit, predict, predict-proba, and held-out metrics. They also check notebook JSON and Python syntax, saved-output provenance, the data contract, and direct dependency coverage. CI installs the locked runtime and notebook extra, checks dependency consistency, runs tests and syntax compilation, and audits the full resolved environment. It does not train on the unavailable competition data.
+CI verifies small/synthetic fitting, analytical boundaries, result schema, notebook/README consistency, provenance and dependencies. It never obtains or trains on restricted competition data. Synthetic fixtures are not empirical results.
 
 ## Limitations
 
-- No competition data is included or downloaded. A full-data training run and corrected full-data metrics remain unverified.
-- The archived historical score is not evidence for the corrected preprocessing.
-- Identity-table enrichment, threshold optimization, and Kaggle submission upload are outside scope.
-- The baseline is not evidence of deployment performance.
+- Opaque feature timing and label maturation are unresolved; no blanket absence-of-leakage claim or arbitrary embargo.
+- Temporal validation is not verified entity-disjoint validation; repeated proxies remain possible.
+- One final chronological cohort; no bootstrap interval or secondary empirical split was run.
+- Logistic Regression extreme-score precision and probability quality are poor; its representation is a deliberately constrained comparator.
+- Reliability is bin-dependent; the final highest XGBoost decile overpredicts observed fraud on average.
+- No identity enrichment, monetary fraud-loss claim, submission/leaderboard evidence, deployment or production-readiness claim.
+- Competition data, raw rows, identifiers, per-row predictions and trained models are not redistributed.
 
 ## Author
 
