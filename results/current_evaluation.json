@@ -1,22 +1,12 @@
 {
   "schema_version": 1,
-  "status": "blocked",
+  "status": "completed",
   "dataset_kind": "ieee",
-  "publication_status": "BLOCKED ON DATA",
-  "created_at_utc": "2026-10-02T22:31:17.226888+00:00",
-  "reason": "Missing local required files: train_transaction.csv, test_transaction.csv",
-  "expectations": {
-    "required_files": [
-      "train_transaction.csv",
-      "test_transaction.csv"
-    ],
-    "real_run_acknowledgment_required": true,
-    "full_train_no_sampling": true,
-    "default_split": "temporal pending TransactionDT inspection"
-  },
+  "publication_status": "FULL EMPIRICAL RUN",
+  "created_at_utc": "2026-10-02T22:51:03.575182+00:00",
   "provenance": {
-    "captured_at_utc": "2026-10-02T22:31:17.280024+00:00",
-    "git_sha": "6fb830c1e4f600b3d7b8976835de58f7c339c701",
+    "captured_at_utc": "2026-10-02T22:47:38.820440+00:00",
+    "git_sha": "7148defa53109f6e47cc6993d6fbc4bd55d9c3ef",
     "worktree_clean": true,
     "worktree_dirty": false,
     "python": "3.11.16",
@@ -27,18 +17,3166 @@
       "xgboost": "3.2.0"
     },
     "source_sha256": {
-      "evaluation.py": "bd1fbf05c98c79016036bf774fcaf7dcd2fc8083364745d36ffb8873c49f1b35",
+      "evaluation.py": "8fd2552a723efe7867d8fdbc54711e93b66bd8040e4f9cec173a0bfc6761da00",
       "fraud_detection.py": "95d1146b9f0ad7588e1023d33ca59a05b4eb6c376a4f544e5be4b74c73c1edaa"
     },
     "data_sha256": {
-      "train_transaction.csv": null,
-      "test_transaction.csv": null
+      "train_transaction.csv": "3a5c83ab6b3cc13dcabe5ffa9f522307fd5f7f7b6e6f6a60c32284ca6283d642",
+      "test_transaction.csv": "2a8e51f1d335a86025d2b7f45beb9b78d0ab1edd726ef531d8b71a8a0065c011"
     }
   },
-  "row_counts": null,
-  "metrics": null,
-  "split": null,
-  "calibration": null,
-  "importance": null,
-  "bootstrap": null
+  "row_counts": {
+    "train_csv": 590540,
+    "test_csv": 506691
+  },
+  "dataset_summary": {
+    "name": "IEEE-CIS Fraud Detection transaction tables",
+    "source": "Kaggle competition; authorized local files",
+    "target": "isFraud",
+    "id_field": "TransactionID",
+    "predictor_count": 392,
+    "transformed_feature_count": 392,
+    "positive_count": 20663,
+    "negative_count": 569877,
+    "target_prevalence": 0.03499000914417313,
+    "scope": "full supplied transaction training CSV, no sampling; identity tables not merged",
+    "access_conditions": "User must verify current access/use/publication rules; byte hashes do not establish authorization"
+  },
+  "split": {
+    "strategy": "temporal",
+    "seed": 42,
+    "requested_fractions": [
+      0.6,
+      0.2,
+      0.2
+    ],
+    "partitions": {
+      "model_train": {
+        "rows": 354324,
+        "positive_count": 11988,
+        "index_sha256": "6e568086e0a3a241fe86058fd9a2c9cf2a179249020521361e71ae3591a61918",
+        "time_min": 86400.0,
+        "time_max": 8745772.0
+      },
+      "calibration": {
+        "rows": 118108,
+        "positive_count": 4611,
+        "index_sha256": "7dc131ad66ffb9859e538b1da9f34f1c4d5bf6cc1baa64d7f06261162383f72f",
+        "time_min": 8745798.0,
+        "time_max": 12192842.0
+      },
+      "evaluation": {
+        "rows": 118108,
+        "positive_count": 4064,
+        "index_sha256": "5159605d1f23c803e71112f9ab9cab1588e5fa4a62ac0be20cb2e40276adaff1",
+        "time_min": 12192900.0,
+        "time_max": 15811131.0
+      }
+    },
+    "feasibility": {
+      "temporal": {
+        "feasible": true,
+        "counts": [
+          354324,
+          118108,
+          118108
+        ],
+        "reason": null
+      },
+      "stratified": {
+        "feasible": true,
+        "counts": [
+          354324,
+          118108,
+          118108
+        ],
+        "reason": null
+      }
+    },
+    "default_temporal_pending_actual_time_inspection": true,
+    "time_units": "TransactionDT native units; no inferred calendar origin",
+    "train_test_time": {
+      "rows": 506691,
+      "time_min": 18403224.0,
+      "time_max": 34214345.0,
+      "time_missing_or_nonfinite": 0,
+      "validation": "header alignment and ID/time-only chunked scan; no competition test labels"
+    },
+    "test_strictly_after_train": true
+  },
+  "leakage_audit": {
+    "known_forbidden_features": [],
+    "suspicious_feature_names": [],
+    "feature_timing": "unknown for anonymized variables; availability at prediction time is not verified",
+    "leakage_absence_claim": false,
+    "duplicate_predictor_rows": 3,
+    "card_proxies_present": [
+      "card1",
+      "card2",
+      "card3",
+      "card4",
+      "card5",
+      "card6"
+    ],
+    "group_split": "not executed: card1..6 are unverified proxies, not verified entity IDs",
+    "uncertain_feature_timing_acknowledged": true
+  },
+  "calibration": {
+    "criterion": {
+      "ece_greater_than": 0.02,
+      "minimum_rows": 1000,
+      "minimum_per_class": 30
+    },
+    "before": {
+      "roc_auc": 0.9212344067777951,
+      "average_precision": 0.603589898922087,
+      "threshold": 0.5,
+      "precision": 0.8500477554918816,
+      "recall": 0.38603339839514206,
+      "f1": 0.5309470544369873,
+      "confusion_matrix": [
+        [
+          113183,
+          314
+        ],
+        [
+          2831,
+          1780
+        ]
+      ],
+      "prevalence": 0.03904053916754157,
+      "brier": 0.022539512539369005,
+      "log_loss": 0.09167190407332595,
+      "reliability": {
+        "method": "quantile_unique_edges",
+        "requested_bins": 10,
+        "bins": [
+          {
+            "count": 11811,
+            "positives": 11,
+            "probability_mean": 0.0019562612628772624,
+            "fraud_fraction": 0.0009313351960037253
+          },
+          {
+            "count": 11811,
+            "positives": 30,
+            "probability_mean": 0.0034084919918634157,
+            "fraud_fraction": 0.00254000508001016
+          },
+          {
+            "count": 11811,
+            "positives": 32,
+            "probability_mean": 0.004804333574545064,
+            "fraud_fraction": 0.0027093387520108372
+          },
+          {
+            "count": 11810,
+            "positives": 44,
+            "probability_mean": 0.006411635039088763,
+            "fraud_fraction": 0.0037256562235393736
+          },
+          {
+            "count": 11811,
+            "positives": 62,
+            "probability_mean": 0.008342934440168199,
+            "fraud_fraction": 0.005249343832020997
+          },
+          {
+            "count": 11811,
+            "positives": 97,
+            "probability_mean": 0.01080951124930256,
+            "fraud_fraction": 0.00821268309203285
+          },
+          {
+            "count": 11810,
+            "positives": 135,
+            "probability_mean": 0.01444063405699517,
+            "fraud_fraction": 0.01143099068585944
+          },
+          {
+            "count": 11811,
+            "positives": 260,
+            "probability_mean": 0.02088398269185486,
+            "fraud_fraction": 0.022013377360088054
+          },
+          {
+            "count": 11811,
+            "positives": 517,
+            "probability_mean": 0.0365874089919464,
+            "fraud_fraction": 0.043772754212175094
+          },
+          {
+            "count": 11811,
+            "positives": 3423,
+            "probability_mean": 0.263420828527035,
+            "fraud_fraction": 0.28981457962915924
+          }
+        ],
+        "ece": 0.005008330559264375
+      },
+      "review_budgets": [
+        {
+          "budget_fraction": 0.005,
+          "alerts": 591,
+          "tp": 556,
+          "fp": 35,
+          "precision": 0.9407783417935702,
+          "recall": 0.12058121882454999,
+          "threshold": 0.9794638156890869,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.01,
+          "alerts": 1182,
+          "tp": 1084,
+          "fp": 98,
+          "precision": 0.9170896785109983,
+          "recall": 0.23509000216872697,
+          "threshold": 0.9023417234420776,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.02,
+          "alerts": 2363,
+          "tp": 1917,
+          "fp": 446,
+          "precision": 0.81125687685146,
+          "recall": 0.41574495770982434,
+          "threshold": 0.4207058846950531,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        }
+      ]
+    },
+    "method": null,
+    "decision_before_final_metrics": true,
+    "limitations": "Exploratory ECE flag, not calibration adequacy; sparse bins and severe imbalance can mask error. Brier mixes discrimination and calibration.",
+    "decision": "no calibration: exploratory flag not exceeded; adequacy not established",
+    "decision_at_utc": "2026-10-02T22:50:54.832109+00:00",
+    "final_comparison": {
+      "raw_xgboost": {
+        "roc_auc": 0.8875456136973794,
+        "average_precision": 0.48019716994743494,
+        "threshold": 0.5,
+        "precision": 0.7705479452054794,
+        "recall": 0.33218503937007876,
+        "f1": 0.4642365887207703,
+        "confusion_matrix": [
+          [
+            113642,
+            402
+          ],
+          [
+            2714,
+            1350
+          ]
+        ],
+        "prevalence": 0.034409184813899145,
+        "brier": 0.023364563053133183,
+        "log_loss": 0.09750089956839965,
+        "reliability": {
+          "method": "quantile_unique_edges",
+          "requested_bins": 10,
+          "bins": [
+            {
+              "count": 11811,
+              "positives": 28,
+              "probability_mean": 0.001937144915233175,
+              "fraud_fraction": 0.0023706714080094825
+            },
+            {
+              "count": 11811,
+              "positives": 36,
+              "probability_mean": 0.0033847866249894065,
+              "fraud_fraction": 0.003048006096012192
+            },
+            {
+              "count": 11811,
+              "positives": 40,
+              "probability_mean": 0.004757683895352949,
+              "fraud_fraction": 0.0033866734400135466
+            },
+            {
+              "count": 11810,
+              "positives": 55,
+              "probability_mean": 0.006377175696522225,
+              "fraud_fraction": 0.0046570702794242165
+            },
+            {
+              "count": 11811,
+              "positives": 87,
+              "probability_mean": 0.00830723405144235,
+              "fraud_fraction": 0.007366014732029464
+            },
+            {
+              "count": 11811,
+              "positives": 110,
+              "probability_mean": 0.010780397046005082,
+              "fraud_fraction": 0.009313351960037254
+            },
+            {
+              "count": 11810,
+              "positives": 181,
+              "probability_mean": 0.014563924751570173,
+              "fraud_fraction": 0.015325994919559695
+            },
+            {
+              "count": 11811,
+              "positives": 289,
+              "probability_mean": 0.021754317152458267,
+              "fraud_fraction": 0.024468715604097874
+            },
+            {
+              "count": 11811,
+              "positives": 579,
+              "probability_mean": 0.0408524088271359,
+              "fraud_fraction": 0.04902209804419609
+            },
+            {
+              "count": 11811,
+              "positives": 2659,
+              "probability_mean": 0.2530162988473293,
+              "fraud_fraction": 0.2251291169249005
+            }
+          ],
+          "ece": 0.004580359250978761
+        },
+        "review_budgets": [
+          {
+            "budget_fraction": 0.005,
+            "alerts": 591,
+            "tp": 548,
+            "fp": 43,
+            "precision": 0.9272419627749577,
+            "recall": 0.13484251968503938,
+            "threshold": 0.9651979804039001,
+            "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+          },
+          {
+            "budget_fraction": 0.01,
+            "alerts": 1182,
+            "tp": 1029,
+            "fp": 153,
+            "precision": 0.8705583756345178,
+            "recall": 0.2531988188976378,
+            "threshold": 0.7713785767555237,
+            "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+          },
+          {
+            "budget_fraction": 0.02,
+            "alerts": 2363,
+            "tp": 1551,
+            "fp": 812,
+            "precision": 0.6563690224291155,
+            "recall": 0.38164370078740156,
+            "threshold": 0.33907562494277954,
+            "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+          }
+        ]
+      },
+      "selected_xgboost": {
+        "roc_auc": 0.8875456136973794,
+        "average_precision": 0.48019716994743494,
+        "threshold": 0.5,
+        "precision": 0.7705479452054794,
+        "recall": 0.33218503937007876,
+        "f1": 0.4642365887207703,
+        "confusion_matrix": [
+          [
+            113642,
+            402
+          ],
+          [
+            2714,
+            1350
+          ]
+        ],
+        "prevalence": 0.034409184813899145,
+        "brier": 0.023364563053133183,
+        "log_loss": 0.09750089956839965,
+        "reliability": {
+          "method": "quantile_unique_edges",
+          "requested_bins": 10,
+          "bins": [
+            {
+              "count": 11811,
+              "positives": 28,
+              "probability_mean": 0.001937144915233175,
+              "fraud_fraction": 0.0023706714080094825
+            },
+            {
+              "count": 11811,
+              "positives": 36,
+              "probability_mean": 0.0033847866249894065,
+              "fraud_fraction": 0.003048006096012192
+            },
+            {
+              "count": 11811,
+              "positives": 40,
+              "probability_mean": 0.004757683895352949,
+              "fraud_fraction": 0.0033866734400135466
+            },
+            {
+              "count": 11810,
+              "positives": 55,
+              "probability_mean": 0.006377175696522225,
+              "fraud_fraction": 0.0046570702794242165
+            },
+            {
+              "count": 11811,
+              "positives": 87,
+              "probability_mean": 0.00830723405144235,
+              "fraud_fraction": 0.007366014732029464
+            },
+            {
+              "count": 11811,
+              "positives": 110,
+              "probability_mean": 0.010780397046005082,
+              "fraud_fraction": 0.009313351960037254
+            },
+            {
+              "count": 11810,
+              "positives": 181,
+              "probability_mean": 0.014563924751570173,
+              "fraud_fraction": 0.015325994919559695
+            },
+            {
+              "count": 11811,
+              "positives": 289,
+              "probability_mean": 0.021754317152458267,
+              "fraud_fraction": 0.024468715604097874
+            },
+            {
+              "count": 11811,
+              "positives": 579,
+              "probability_mean": 0.0408524088271359,
+              "fraud_fraction": 0.04902209804419609
+            },
+            {
+              "count": 11811,
+              "positives": 2659,
+              "probability_mean": 0.2530162988473293,
+              "fraud_fraction": 0.2251291169249005
+            }
+          ],
+          "ece": 0.004580359250978761
+        },
+        "review_budgets": [
+          {
+            "budget_fraction": 0.005,
+            "alerts": 591,
+            "tp": 548,
+            "fp": 43,
+            "precision": 0.9272419627749577,
+            "recall": 0.13484251968503938,
+            "threshold": 0.9651979804039001,
+            "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+          },
+          {
+            "budget_fraction": 0.01,
+            "alerts": 1182,
+            "tp": 1029,
+            "fp": 153,
+            "precision": 0.8705583756345178,
+            "recall": 0.2531988188976378,
+            "threshold": 0.7713785767555237,
+            "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+          },
+          {
+            "budget_fraction": 0.02,
+            "alerts": 2363,
+            "tp": 1551,
+            "fp": 812,
+            "precision": 0.6563690224291155,
+            "recall": 0.38164370078740156,
+            "threshold": 0.33907562494277954,
+            "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+          }
+        ]
+      }
+    }
+  },
+  "final_metrics_opened_at_utc": "2026-10-02T22:50:54.832109+00:00",
+  "metrics": {
+    "logistic_regression": {
+      "roc_auc": 0.8054374717093582,
+      "average_precision": 0.1730306007925781,
+      "threshold": 0.5,
+      "precision": 0.32538955087076077,
+      "recall": 0.2620570866141732,
+      "f1": 0.2903093907591659,
+      "confusion_matrix": [
+        [
+          111836,
+          2208
+        ],
+        [
+          2999,
+          1065
+        ]
+      ],
+      "prevalence": 0.034409184813899145,
+      "brier": 0.04045346052773216,
+      "log_loss": 0.49699971797294584,
+      "reliability": {
+        "method": "quantile_unique_edges",
+        "requested_bins": 10,
+        "bins": [
+          {
+            "count": 11811,
+            "positives": 122,
+            "probability_mean": 0.002858130149202565,
+            "fraud_fraction": 0.010329353992041317
+          },
+          {
+            "count": 11811,
+            "positives": 82,
+            "probability_mean": 0.006934817216537588,
+            "fraud_fraction": 0.00694268055202777
+          },
+          {
+            "count": 11811,
+            "positives": 95,
+            "probability_mean": 0.010627653332140078,
+            "fraud_fraction": 0.008043349420032174
+          },
+          {
+            "count": 11810,
+            "positives": 118,
+            "probability_mean": 0.01592778489645244,
+            "fraud_fraction": 0.009991532599491955
+          },
+          {
+            "count": 11811,
+            "positives": 147,
+            "probability_mean": 0.02288489446585202,
+            "fraud_fraction": 0.012446024892049785
+          },
+          {
+            "count": 11811,
+            "positives": 190,
+            "probability_mean": 0.03092324813869494,
+            "fraud_fraction": 0.016086698840064348
+          },
+          {
+            "count": 11810,
+            "positives": 244,
+            "probability_mean": 0.04154918155090058,
+            "fraud_fraction": 0.020660457239627436
+          },
+          {
+            "count": 11811,
+            "positives": 365,
+            "probability_mean": 0.05927035951864248,
+            "fraud_fraction": 0.030903395140123614
+          },
+          {
+            "count": 11811,
+            "positives": 553,
+            "probability_mean": 0.09177255509255054,
+            "fraud_fraction": 0.046820760308187284
+          },
+          {
+            "count": 11811,
+            "positives": 2148,
+            "probability_mean": 0.39984433658481333,
+            "fraud_fraction": 0.18186436372872747
+          }
+        ],
+        "ece": 0.03534662327776885
+      },
+      "review_budgets": [
+        {
+          "budget_fraction": 0.005,
+          "alerts": 591,
+          "tp": 4,
+          "fp": 587,
+          "precision": 0.00676818950930626,
+          "recall": 0.000984251968503937,
+          "threshold": 1.0,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.01,
+          "alerts": 1182,
+          "tp": 34,
+          "fp": 1148,
+          "precision": 0.028764805414551606,
+          "recall": 0.008366141732283465,
+          "threshold": 0.9999999999987745,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.02,
+          "alerts": 2363,
+          "tp": 724,
+          "fp": 1639,
+          "precision": 0.3063901819720694,
+          "recall": 0.1781496062992126,
+          "threshold": 0.8069873824494056,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        }
+      ]
+    },
+    "xgboost": {
+      "roc_auc": 0.8875456136973794,
+      "average_precision": 0.48019716994743494,
+      "threshold": 0.5,
+      "precision": 0.7705479452054794,
+      "recall": 0.33218503937007876,
+      "f1": 0.4642365887207703,
+      "confusion_matrix": [
+        [
+          113642,
+          402
+        ],
+        [
+          2714,
+          1350
+        ]
+      ],
+      "prevalence": 0.034409184813899145,
+      "brier": 0.023364563053133183,
+      "log_loss": 0.09750089956839965,
+      "reliability": {
+        "method": "quantile_unique_edges",
+        "requested_bins": 10,
+        "bins": [
+          {
+            "count": 11811,
+            "positives": 28,
+            "probability_mean": 0.001937144915233175,
+            "fraud_fraction": 0.0023706714080094825
+          },
+          {
+            "count": 11811,
+            "positives": 36,
+            "probability_mean": 0.0033847866249894065,
+            "fraud_fraction": 0.003048006096012192
+          },
+          {
+            "count": 11811,
+            "positives": 40,
+            "probability_mean": 0.004757683895352949,
+            "fraud_fraction": 0.0033866734400135466
+          },
+          {
+            "count": 11810,
+            "positives": 55,
+            "probability_mean": 0.006377175696522225,
+            "fraud_fraction": 0.0046570702794242165
+          },
+          {
+            "count": 11811,
+            "positives": 87,
+            "probability_mean": 0.00830723405144235,
+            "fraud_fraction": 0.007366014732029464
+          },
+          {
+            "count": 11811,
+            "positives": 110,
+            "probability_mean": 0.010780397046005082,
+            "fraud_fraction": 0.009313351960037254
+          },
+          {
+            "count": 11810,
+            "positives": 181,
+            "probability_mean": 0.014563924751570173,
+            "fraud_fraction": 0.015325994919559695
+          },
+          {
+            "count": 11811,
+            "positives": 289,
+            "probability_mean": 0.021754317152458267,
+            "fraud_fraction": 0.024468715604097874
+          },
+          {
+            "count": 11811,
+            "positives": 579,
+            "probability_mean": 0.0408524088271359,
+            "fraud_fraction": 0.04902209804419609
+          },
+          {
+            "count": 11811,
+            "positives": 2659,
+            "probability_mean": 0.2530162988473293,
+            "fraud_fraction": 0.2251291169249005
+          }
+        ],
+        "ece": 0.004580359250978761
+      },
+      "review_budgets": [
+        {
+          "budget_fraction": 0.005,
+          "alerts": 591,
+          "tp": 548,
+          "fp": 43,
+          "precision": 0.9272419627749577,
+          "recall": 0.13484251968503938,
+          "threshold": 0.9651979804039001,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.01,
+          "alerts": 1182,
+          "tp": 1029,
+          "fp": 153,
+          "precision": 0.8705583756345178,
+          "recall": 0.2531988188976378,
+          "threshold": 0.7713785767555237,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.02,
+          "alerts": 2363,
+          "tp": 1551,
+          "fp": 812,
+          "precision": 0.6563690224291155,
+          "recall": 0.38164370078740156,
+          "threshold": 0.33907562494277954,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        }
+      ]
+    }
+  },
+  "model_params": {
+    "xgboost": {
+      "objective": "binary:logistic",
+      "base_score": null,
+      "booster": null,
+      "callbacks": null,
+      "colsample_bylevel": null,
+      "colsample_bynode": null,
+      "colsample_bytree": 0.8,
+      "device": "cpu",
+      "early_stopping_rounds": null,
+      "enable_categorical": false,
+      "eval_metric": "auc",
+      "feature_types": null,
+      "feature_weights": null,
+      "gamma": null,
+      "grow_policy": null,
+      "importance_type": null,
+      "interaction_constraints": null,
+      "learning_rate": 0.05,
+      "max_bin": null,
+      "max_cat_threshold": null,
+      "max_cat_to_onehot": null,
+      "max_delta_step": null,
+      "max_depth": 6,
+      "max_leaves": null,
+      "min_child_weight": null,
+      "missing": "NaN missing-value sentinel",
+      "monotone_constraints": null,
+      "multi_strategy": null,
+      "n_estimators": 500,
+      "n_jobs": 4,
+      "num_parallel_tree": null,
+      "random_state": 42,
+      "reg_alpha": null,
+      "reg_lambda": null,
+      "sampling_method": null,
+      "scale_pos_weight": null,
+      "subsample": 0.8,
+      "tree_method": "hist",
+      "validate_parameters": null,
+      "verbosity": null
+    },
+    "logistic_regression": {
+      "C": 1.0,
+      "class_weight": null,
+      "dual": false,
+      "fit_intercept": true,
+      "intercept_scaling": 1,
+      "l1_ratio": 0.0,
+      "max_iter": 1000,
+      "n_jobs": null,
+      "penalty": "deprecated",
+      "random_state": 42,
+      "solver": "lbfgs",
+      "tol": 0.0001,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "preprocessing": {
+    "fit_partition": "model_train only",
+    "transformed_feature_names": [
+      "numeric__TransactionDT",
+      "numeric__TransactionAmt",
+      "numeric__card1",
+      "numeric__card2",
+      "numeric__card3",
+      "numeric__card5",
+      "numeric__addr1",
+      "numeric__addr2",
+      "numeric__dist1",
+      "numeric__dist2",
+      "numeric__C1",
+      "numeric__C2",
+      "numeric__C3",
+      "numeric__C4",
+      "numeric__C5",
+      "numeric__C6",
+      "numeric__C7",
+      "numeric__C8",
+      "numeric__C9",
+      "numeric__C10",
+      "numeric__C11",
+      "numeric__C12",
+      "numeric__C13",
+      "numeric__C14",
+      "numeric__D1",
+      "numeric__D2",
+      "numeric__D3",
+      "numeric__D4",
+      "numeric__D5",
+      "numeric__D6",
+      "numeric__D7",
+      "numeric__D8",
+      "numeric__D9",
+      "numeric__D10",
+      "numeric__D11",
+      "numeric__D12",
+      "numeric__D13",
+      "numeric__D14",
+      "numeric__D15",
+      "numeric__V1",
+      "numeric__V2",
+      "numeric__V3",
+      "numeric__V4",
+      "numeric__V5",
+      "numeric__V6",
+      "numeric__V7",
+      "numeric__V8",
+      "numeric__V9",
+      "numeric__V10",
+      "numeric__V11",
+      "numeric__V12",
+      "numeric__V13",
+      "numeric__V14",
+      "numeric__V15",
+      "numeric__V16",
+      "numeric__V17",
+      "numeric__V18",
+      "numeric__V19",
+      "numeric__V20",
+      "numeric__V21",
+      "numeric__V22",
+      "numeric__V23",
+      "numeric__V24",
+      "numeric__V25",
+      "numeric__V26",
+      "numeric__V27",
+      "numeric__V28",
+      "numeric__V29",
+      "numeric__V30",
+      "numeric__V31",
+      "numeric__V32",
+      "numeric__V33",
+      "numeric__V34",
+      "numeric__V35",
+      "numeric__V36",
+      "numeric__V37",
+      "numeric__V38",
+      "numeric__V39",
+      "numeric__V40",
+      "numeric__V41",
+      "numeric__V42",
+      "numeric__V43",
+      "numeric__V44",
+      "numeric__V45",
+      "numeric__V46",
+      "numeric__V47",
+      "numeric__V48",
+      "numeric__V49",
+      "numeric__V50",
+      "numeric__V51",
+      "numeric__V52",
+      "numeric__V53",
+      "numeric__V54",
+      "numeric__V55",
+      "numeric__V56",
+      "numeric__V57",
+      "numeric__V58",
+      "numeric__V59",
+      "numeric__V60",
+      "numeric__V61",
+      "numeric__V62",
+      "numeric__V63",
+      "numeric__V64",
+      "numeric__V65",
+      "numeric__V66",
+      "numeric__V67",
+      "numeric__V68",
+      "numeric__V69",
+      "numeric__V70",
+      "numeric__V71",
+      "numeric__V72",
+      "numeric__V73",
+      "numeric__V74",
+      "numeric__V75",
+      "numeric__V76",
+      "numeric__V77",
+      "numeric__V78",
+      "numeric__V79",
+      "numeric__V80",
+      "numeric__V81",
+      "numeric__V82",
+      "numeric__V83",
+      "numeric__V84",
+      "numeric__V85",
+      "numeric__V86",
+      "numeric__V87",
+      "numeric__V88",
+      "numeric__V89",
+      "numeric__V90",
+      "numeric__V91",
+      "numeric__V92",
+      "numeric__V93",
+      "numeric__V94",
+      "numeric__V95",
+      "numeric__V96",
+      "numeric__V97",
+      "numeric__V98",
+      "numeric__V99",
+      "numeric__V100",
+      "numeric__V101",
+      "numeric__V102",
+      "numeric__V103",
+      "numeric__V104",
+      "numeric__V105",
+      "numeric__V106",
+      "numeric__V107",
+      "numeric__V108",
+      "numeric__V109",
+      "numeric__V110",
+      "numeric__V111",
+      "numeric__V112",
+      "numeric__V113",
+      "numeric__V114",
+      "numeric__V115",
+      "numeric__V116",
+      "numeric__V117",
+      "numeric__V118",
+      "numeric__V119",
+      "numeric__V120",
+      "numeric__V121",
+      "numeric__V122",
+      "numeric__V123",
+      "numeric__V124",
+      "numeric__V125",
+      "numeric__V126",
+      "numeric__V127",
+      "numeric__V128",
+      "numeric__V129",
+      "numeric__V130",
+      "numeric__V131",
+      "numeric__V132",
+      "numeric__V133",
+      "numeric__V134",
+      "numeric__V135",
+      "numeric__V136",
+      "numeric__V137",
+      "numeric__V138",
+      "numeric__V139",
+      "numeric__V140",
+      "numeric__V141",
+      "numeric__V142",
+      "numeric__V143",
+      "numeric__V144",
+      "numeric__V145",
+      "numeric__V146",
+      "numeric__V147",
+      "numeric__V148",
+      "numeric__V149",
+      "numeric__V150",
+      "numeric__V151",
+      "numeric__V152",
+      "numeric__V153",
+      "numeric__V154",
+      "numeric__V155",
+      "numeric__V156",
+      "numeric__V157",
+      "numeric__V158",
+      "numeric__V159",
+      "numeric__V160",
+      "numeric__V161",
+      "numeric__V162",
+      "numeric__V163",
+      "numeric__V164",
+      "numeric__V165",
+      "numeric__V166",
+      "numeric__V167",
+      "numeric__V168",
+      "numeric__V169",
+      "numeric__V170",
+      "numeric__V171",
+      "numeric__V172",
+      "numeric__V173",
+      "numeric__V174",
+      "numeric__V175",
+      "numeric__V176",
+      "numeric__V177",
+      "numeric__V178",
+      "numeric__V179",
+      "numeric__V180",
+      "numeric__V181",
+      "numeric__V182",
+      "numeric__V183",
+      "numeric__V184",
+      "numeric__V185",
+      "numeric__V186",
+      "numeric__V187",
+      "numeric__V188",
+      "numeric__V189",
+      "numeric__V190",
+      "numeric__V191",
+      "numeric__V192",
+      "numeric__V193",
+      "numeric__V194",
+      "numeric__V195",
+      "numeric__V196",
+      "numeric__V197",
+      "numeric__V198",
+      "numeric__V199",
+      "numeric__V200",
+      "numeric__V201",
+      "numeric__V202",
+      "numeric__V203",
+      "numeric__V204",
+      "numeric__V205",
+      "numeric__V206",
+      "numeric__V207",
+      "numeric__V208",
+      "numeric__V209",
+      "numeric__V210",
+      "numeric__V211",
+      "numeric__V212",
+      "numeric__V213",
+      "numeric__V214",
+      "numeric__V215",
+      "numeric__V216",
+      "numeric__V217",
+      "numeric__V218",
+      "numeric__V219",
+      "numeric__V220",
+      "numeric__V221",
+      "numeric__V222",
+      "numeric__V223",
+      "numeric__V224",
+      "numeric__V225",
+      "numeric__V226",
+      "numeric__V227",
+      "numeric__V228",
+      "numeric__V229",
+      "numeric__V230",
+      "numeric__V231",
+      "numeric__V232",
+      "numeric__V233",
+      "numeric__V234",
+      "numeric__V235",
+      "numeric__V236",
+      "numeric__V237",
+      "numeric__V238",
+      "numeric__V239",
+      "numeric__V240",
+      "numeric__V241",
+      "numeric__V242",
+      "numeric__V243",
+      "numeric__V244",
+      "numeric__V245",
+      "numeric__V246",
+      "numeric__V247",
+      "numeric__V248",
+      "numeric__V249",
+      "numeric__V250",
+      "numeric__V251",
+      "numeric__V252",
+      "numeric__V253",
+      "numeric__V254",
+      "numeric__V255",
+      "numeric__V256",
+      "numeric__V257",
+      "numeric__V258",
+      "numeric__V259",
+      "numeric__V260",
+      "numeric__V261",
+      "numeric__V262",
+      "numeric__V263",
+      "numeric__V264",
+      "numeric__V265",
+      "numeric__V266",
+      "numeric__V267",
+      "numeric__V268",
+      "numeric__V269",
+      "numeric__V270",
+      "numeric__V271",
+      "numeric__V272",
+      "numeric__V273",
+      "numeric__V274",
+      "numeric__V275",
+      "numeric__V276",
+      "numeric__V277",
+      "numeric__V278",
+      "numeric__V279",
+      "numeric__V280",
+      "numeric__V281",
+      "numeric__V282",
+      "numeric__V283",
+      "numeric__V284",
+      "numeric__V285",
+      "numeric__V286",
+      "numeric__V287",
+      "numeric__V288",
+      "numeric__V289",
+      "numeric__V290",
+      "numeric__V291",
+      "numeric__V292",
+      "numeric__V293",
+      "numeric__V294",
+      "numeric__V295",
+      "numeric__V296",
+      "numeric__V297",
+      "numeric__V298",
+      "numeric__V299",
+      "numeric__V300",
+      "numeric__V301",
+      "numeric__V302",
+      "numeric__V303",
+      "numeric__V304",
+      "numeric__V305",
+      "numeric__V306",
+      "numeric__V307",
+      "numeric__V308",
+      "numeric__V309",
+      "numeric__V310",
+      "numeric__V311",
+      "numeric__V312",
+      "numeric__V313",
+      "numeric__V314",
+      "numeric__V315",
+      "numeric__V316",
+      "numeric__V317",
+      "numeric__V318",
+      "numeric__V319",
+      "numeric__V320",
+      "numeric__V321",
+      "numeric__V322",
+      "numeric__V323",
+      "numeric__V324",
+      "numeric__V325",
+      "numeric__V326",
+      "numeric__V327",
+      "numeric__V328",
+      "numeric__V329",
+      "numeric__V330",
+      "numeric__V331",
+      "numeric__V332",
+      "numeric__V333",
+      "numeric__V334",
+      "numeric__V335",
+      "numeric__V336",
+      "numeric__V337",
+      "numeric__V338",
+      "numeric__V339",
+      "categorical__ProductCD",
+      "categorical__card4",
+      "categorical__card6",
+      "categorical__P_emaildomain",
+      "categorical__R_emaildomain",
+      "categorical__M1",
+      "categorical__M2",
+      "categorical__M3",
+      "categorical__M4",
+      "categorical__M5",
+      "categorical__M6",
+      "categorical__M7",
+      "categorical__M8",
+      "categorical__M9"
+    ],
+    "baseline_scaler_fit_partition": "model_train only",
+    "categorical_geometry": "ordinal encodings impose arbitrary distances for logistic regression"
+  },
+  "importance": {
+    "kind": "normalized total_gain",
+    "features": [
+      {
+        "feature": "numeric__V258",
+        "total_gain": 57232.3671875,
+        "normalized_total_gain": 0.10129212656016581
+      },
+      {
+        "feature": "numeric__C14",
+        "total_gain": 26848.4375,
+        "normalized_total_gain": 0.04751743572449454
+      },
+      {
+        "feature": "numeric__C1",
+        "total_gain": 26713.73828125,
+        "normalized_total_gain": 0.047279039673733946
+      },
+      {
+        "feature": "numeric__C13",
+        "total_gain": 22874.1171875,
+        "normalized_total_gain": 0.040483525091975545
+      },
+      {
+        "feature": "numeric__TransactionDT",
+        "total_gain": 20048.791015625,
+        "normalized_total_gain": 0.03548315012517151
+      },
+      {
+        "feature": "numeric__card1",
+        "total_gain": 18346.6953125,
+        "normalized_total_gain": 0.03247071324983452
+      },
+      {
+        "feature": "numeric__V294",
+        "total_gain": 14344.1923828125,
+        "normalized_total_gain": 0.02538692389715704
+      },
+      {
+        "feature": "numeric__TransactionAmt",
+        "total_gain": 13229.150390625,
+        "normalized_total_gain": 0.023413478098164756
+      },
+      {
+        "feature": "numeric__C8",
+        "total_gain": 12044.7509765625,
+        "normalized_total_gain": 0.021317280767134083
+      },
+      {
+        "feature": "numeric__card2",
+        "total_gain": 11944.455078125,
+        "normalized_total_gain": 0.02113977308507868
+      },
+      {
+        "feature": "numeric__V187",
+        "total_gain": 11787.1484375,
+        "normalized_total_gain": 0.02086136551722917
+      },
+      {
+        "feature": "numeric__C4",
+        "total_gain": 11474.1376953125,
+        "normalized_total_gain": 0.020307386619091396
+      },
+      {
+        "feature": "numeric__V257",
+        "total_gain": 11454.6025390625,
+        "normalized_total_gain": 0.02027281252026433
+      },
+      {
+        "feature": "numeric__C11",
+        "total_gain": 11199.69921875,
+        "normalized_total_gain": 0.01982167445538031
+      },
+      {
+        "feature": "numeric__D2",
+        "total_gain": 10893.779296875,
+        "normalized_total_gain": 0.019280245173898376
+      },
+      {
+        "feature": "numeric__addr1",
+        "total_gain": 10596.1396484375,
+        "normalized_total_gain": 0.01875347065066252
+      },
+      {
+        "feature": "categorical__card6",
+        "total_gain": 8433.5546875,
+        "normalized_total_gain": 0.01492604151702649
+      },
+      {
+        "feature": "numeric__D15",
+        "total_gain": 7830.435546875,
+        "normalized_total_gain": 0.013858617202339244
+      },
+      {
+        "feature": "categorical__P_emaildomain",
+        "total_gain": 7489.99853515625,
+        "normalized_total_gain": 0.013256098198297215
+      },
+      {
+        "feature": "numeric__V201",
+        "total_gain": 6862.81884765625,
+        "normalized_total_gain": 0.012146090567928043
+      },
+      {
+        "feature": "numeric__D1",
+        "total_gain": 6655.3017578125,
+        "normalized_total_gain": 0.011778818544057582
+      },
+      {
+        "feature": "numeric__V317",
+        "total_gain": 6579.66162109375,
+        "normalized_total_gain": 0.011644947612658867
+      },
+      {
+        "feature": "numeric__card5",
+        "total_gain": 6299.37353515625,
+        "normalized_total_gain": 0.011148882576923482
+      },
+      {
+        "feature": "numeric__V70",
+        "total_gain": 5980.52001953125,
+        "normalized_total_gain": 0.010584562905276294
+      },
+      {
+        "feature": "numeric__D10",
+        "total_gain": 5589.96875,
+        "normalized_total_gain": 0.009893349688601361
+      },
+      {
+        "feature": "numeric__C5",
+        "total_gain": 5451.08349609375,
+        "normalized_total_gain": 0.009647545025832052
+      },
+      {
+        "feature": "categorical__ProductCD",
+        "total_gain": 5357.576171875,
+        "normalized_total_gain": 0.009482052033238576
+      },
+      {
+        "feature": "categorical__R_emaildomain",
+        "total_gain": 5345.9521484375,
+        "normalized_total_gain": 0.009461479372853724
+      },
+      {
+        "feature": "numeric__card3",
+        "total_gain": 5333.33154296875,
+        "normalized_total_gain": 0.009439142921834348
+      },
+      {
+        "feature": "numeric__D4",
+        "total_gain": 4769.21728515625,
+        "normalized_total_gain": 0.008440751004730181
+      },
+      {
+        "feature": "numeric__V189",
+        "total_gain": 4518.64599609375,
+        "normalized_total_gain": 0.007997279941565663
+      },
+      {
+        "feature": "numeric__V91",
+        "total_gain": 4490.08251953125,
+        "normalized_total_gain": 0.007946727161292074
+      },
+      {
+        "feature": "numeric__D8",
+        "total_gain": 4472.873046875,
+        "normalized_total_gain": 0.00791626915006532
+      },
+      {
+        "feature": "numeric__C6",
+        "total_gain": 4313.685546875,
+        "normalized_total_gain": 0.007634532762262753
+      },
+      {
+        "feature": "numeric__V283",
+        "total_gain": 4040.10009765625,
+        "normalized_total_gain": 0.007150330320373577
+      },
+      {
+        "feature": "numeric__V268",
+        "total_gain": 3997.0751953125,
+        "normalized_total_gain": 0.007074183131857605
+      },
+      {
+        "feature": "numeric__C2",
+        "total_gain": 3973.86376953125,
+        "normalized_total_gain": 0.007033102624560508
+      },
+      {
+        "feature": "numeric__C12",
+        "total_gain": 3960.95556640625,
+        "normalized_total_gain": 0.007010257171736264
+      },
+      {
+        "feature": "numeric__V62",
+        "total_gain": 3871.2490234375,
+        "normalized_total_gain": 0.006851490953419679
+      },
+      {
+        "feature": "numeric__D3",
+        "total_gain": 3853.281005859375,
+        "normalized_total_gain": 0.006819690439130341
+      },
+      {
+        "feature": "numeric__dist1",
+        "total_gain": 3771.587890625,
+        "normalized_total_gain": 0.006675106704889452
+      },
+      {
+        "feature": "numeric__C9",
+        "total_gain": 3104.79248046875,
+        "normalized_total_gain": 0.00549498558821413
+      },
+      {
+        "feature": "numeric__C10",
+        "total_gain": 2939.031982421875,
+        "normalized_total_gain": 0.00520161604625838
+      },
+      {
+        "feature": "numeric__V53",
+        "total_gain": 2868.93603515625,
+        "normalized_total_gain": 0.005077557442522431
+      },
+      {
+        "feature": "numeric__V295",
+        "total_gain": 2728.344482421875,
+        "normalized_total_gain": 0.00482873290401949
+      },
+      {
+        "feature": "numeric__V310",
+        "total_gain": 2727.396240234375,
+        "normalized_total_gain": 0.004827054667168806
+      },
+      {
+        "feature": "numeric__V308",
+        "total_gain": 2675.31005859375,
+        "normalized_total_gain": 0.0047348704650809655
+      },
+      {
+        "feature": "numeric__V313",
+        "total_gain": 2625.055908203125,
+        "normalized_total_gain": 0.004645928664982707
+      },
+      {
+        "feature": "categorical__M5",
+        "total_gain": 2456.20556640625,
+        "normalized_total_gain": 0.00434709059429826
+      },
+      {
+        "feature": "numeric__V45",
+        "total_gain": 2440.9375,
+        "normalized_total_gain": 0.004320068561299271
+      },
+      {
+        "feature": "numeric__V324",
+        "total_gain": 2433.117431640625,
+        "normalized_total_gain": 0.004306228292358937
+      },
+      {
+        "feature": "numeric__V315",
+        "total_gain": 2394.8583984375,
+        "normalized_total_gain": 0.00423851592916794
+      },
+      {
+        "feature": "categorical__M4",
+        "total_gain": 2326.087890625,
+        "normalized_total_gain": 0.004116803141050518
+      },
+      {
+        "feature": "numeric__V83",
+        "total_gain": 2311.663330078125,
+        "normalized_total_gain": 0.004091273978370559
+      },
+      {
+        "feature": "numeric__V312",
+        "total_gain": 2304.162841796875,
+        "normalized_total_gain": 0.004077999315001169
+      },
+      {
+        "feature": "numeric__V12",
+        "total_gain": 2125.24462890625,
+        "normalized_total_gain": 0.0037613427244278176
+      },
+      {
+        "feature": "numeric__V152",
+        "total_gain": 2117.427001953125,
+        "normalized_total_gain": 0.003747506776385657
+      },
+      {
+        "feature": "numeric__V281",
+        "total_gain": 2011.608642578125,
+        "normalized_total_gain": 0.0035602252226612356
+      },
+      {
+        "feature": "numeric__V82",
+        "total_gain": 2010.4189453125,
+        "normalized_total_gain": 0.0035581196489811676
+      },
+      {
+        "feature": "numeric__V87",
+        "total_gain": 1966.7216796875,
+        "normalized_total_gain": 0.0034807824851081455
+      },
+      {
+        "feature": "numeric__V296",
+        "total_gain": 1885.83544921875,
+        "normalized_total_gain": 0.0033376268077136796
+      },
+      {
+        "feature": "numeric__V165",
+        "total_gain": 1871.087646484375,
+        "normalized_total_gain": 0.003311525558115516
+      },
+      {
+        "feature": "numeric__V54",
+        "total_gain": 1678.6663818359375,
+        "normalized_total_gain": 0.0029709707278778876
+      },
+      {
+        "feature": "numeric__V30",
+        "total_gain": 1654.43994140625,
+        "normalized_total_gain": 0.0029280938071650536
+      },
+      {
+        "feature": "numeric__V307",
+        "total_gain": 1647.8504638671875,
+        "normalized_total_gain": 0.0029164314869491977
+      },
+      {
+        "feature": "numeric__V314",
+        "total_gain": 1619.0963134765625,
+        "normalized_total_gain": 0.0028655412445282385
+      },
+      {
+        "feature": "categorical__card4",
+        "total_gain": 1612.810791015625,
+        "normalized_total_gain": 0.0028544168761350137
+      },
+      {
+        "feature": "numeric__V38",
+        "total_gain": 1591.5714111328125,
+        "normalized_total_gain": 0.0028168265743377615
+      },
+      {
+        "feature": "numeric__V133",
+        "total_gain": 1456.1077880859375,
+        "normalized_total_gain": 0.0025770776503589625
+      },
+      {
+        "feature": "numeric__V156",
+        "total_gain": 1444.3743896484375,
+        "normalized_total_gain": 0.0025563114137359265
+      },
+      {
+        "feature": "categorical__M6",
+        "total_gain": 1442.3900146484375,
+        "normalized_total_gain": 0.0025527993877003034
+      },
+      {
+        "feature": "numeric__D9",
+        "total_gain": 1400.829345703125,
+        "normalized_total_gain": 0.002479243657864037
+      },
+      {
+        "feature": "numeric__V61",
+        "total_gain": 1394.246337890625,
+        "normalized_total_gain": 0.002467592788028341
+      },
+      {
+        "feature": "numeric__D11",
+        "total_gain": 1363.71484375,
+        "normalized_total_gain": 0.0024135569317368932
+      },
+      {
+        "feature": "numeric__V239",
+        "total_gain": 1339.18603515625,
+        "normalized_total_gain": 0.0023701448677852406
+      },
+      {
+        "feature": "numeric__V13",
+        "total_gain": 1278.9615478515625,
+        "normalized_total_gain": 0.002263557167680118
+      },
+      {
+        "feature": "numeric__V76",
+        "total_gain": 1183.8909912109375,
+        "normalized_total_gain": 0.00209529750398599
+      },
+      {
+        "feature": "numeric__V323",
+        "total_gain": 1163.9208984375,
+        "normalized_total_gain": 0.0020599536371492698
+      },
+      {
+        "feature": "numeric__V67",
+        "total_gain": 1145.913330078125,
+        "normalized_total_gain": 0.002028083124309517
+      },
+      {
+        "feature": "numeric__V320",
+        "total_gain": 1139.1026611328125,
+        "normalized_total_gain": 0.002016029330719119
+      },
+      {
+        "feature": "numeric__V285",
+        "total_gain": 1127.42041015625,
+        "normalized_total_gain": 0.0019953536169128234
+      },
+      {
+        "feature": "numeric__V311",
+        "total_gain": 1012.1328735351562,
+        "normalized_total_gain": 0.0017913131355541546
+      },
+      {
+        "feature": "numeric__D13",
+        "total_gain": 1004.62451171875,
+        "normalized_total_gain": 0.0017780245372881536
+      },
+      {
+        "feature": "numeric__V20",
+        "total_gain": 997.1192016601562,
+        "normalized_total_gain": 0.00176474134014487
+      },
+      {
+        "feature": "numeric__V149",
+        "total_gain": 937.95703125,
+        "normalized_total_gain": 0.0016600337708576
+      },
+      {
+        "feature": "numeric__V261",
+        "total_gain": 921.6978149414062,
+        "normalized_total_gain": 0.0016312575612225232
+      },
+      {
+        "feature": "numeric__V77",
+        "total_gain": 910.0537109375,
+        "normalized_total_gain": 0.001610649361450192
+      },
+      {
+        "feature": "numeric__C7",
+        "total_gain": 904.9077758789062,
+        "normalized_total_gain": 0.001601541880302019
+      },
+      {
+        "feature": "numeric__V309",
+        "total_gain": 901.46484375,
+        "normalized_total_gain": 0.0015954484416749444
+      },
+      {
+        "feature": "numeric__D5",
+        "total_gain": 868.8588256835938,
+        "normalized_total_gain": 0.0015377410101828075
+      },
+      {
+        "feature": "numeric__V49",
+        "total_gain": 829.59912109375,
+        "normalized_total_gain": 0.001468257618852845
+      },
+      {
+        "feature": "numeric__V266",
+        "total_gain": 807.817626953125,
+        "normalized_total_gain": 0.0014297078616161117
+      },
+      {
+        "feature": "categorical__M3",
+        "total_gain": 795.912353515625,
+        "normalized_total_gain": 0.001408637433761644
+      },
+      {
+        "feature": "numeric__V130",
+        "total_gain": 792.3547973632812,
+        "normalized_total_gain": 0.0014023411289653118
+      },
+      {
+        "feature": "numeric__dist2",
+        "total_gain": 775.7713623046875,
+        "normalized_total_gain": 0.0013729911040527613
+      },
+      {
+        "feature": "numeric__V200",
+        "total_gain": 756.1078491210938,
+        "normalized_total_gain": 0.0013381898340042093
+      },
+      {
+        "feature": "numeric__V75",
+        "total_gain": 750.9126586914062,
+        "normalized_total_gain": 0.0013289951787353808
+      },
+      {
+        "feature": "numeric__V78",
+        "total_gain": 728.6964721679688,
+        "normalized_total_gain": 0.0012896760855788118
+      },
+      {
+        "feature": "numeric__V143",
+        "total_gain": 702.6713256835938,
+        "normalized_total_gain": 0.0012436157431364688
+      },
+      {
+        "feature": "numeric__V282",
+        "total_gain": 696.0079345703125,
+        "normalized_total_gain": 0.0012318226077284024
+      },
+      {
+        "feature": "numeric__V131",
+        "total_gain": 664.6061401367188,
+        "normalized_total_gain": 0.001176246459260467
+      },
+      {
+        "feature": "numeric__V44",
+        "total_gain": 645.6405029296875,
+        "normalized_total_gain": 0.0011426803179548813
+      },
+      {
+        "feature": "numeric__V19",
+        "total_gain": 610.4900512695312,
+        "normalized_total_gain": 0.0010804696463860635
+      },
+      {
+        "feature": "numeric__V129",
+        "total_gain": 601.0130004882812,
+        "normalized_total_gain": 0.001063696783855206
+      },
+      {
+        "feature": "numeric__V56",
+        "total_gain": 596.8095703125,
+        "normalized_total_gain": 0.0010562573854470088
+      },
+      {
+        "feature": "numeric__V71",
+        "total_gain": 595.77392578125,
+        "normalized_total_gain": 0.0010544244604417045
+      },
+      {
+        "feature": "numeric__V318",
+        "total_gain": 586.4987182617188,
+        "normalized_total_gain": 0.0010380088281673617
+      },
+      {
+        "feature": "numeric__V24",
+        "total_gain": 583.1853637695312,
+        "normalized_total_gain": 0.0010321447212108589
+      },
+      {
+        "feature": "numeric__V163",
+        "total_gain": 582.5811767578125,
+        "normalized_total_gain": 0.0010310754069353103
+      },
+      {
+        "feature": "numeric__V207",
+        "total_gain": 569.017822265625,
+        "normalized_total_gain": 0.0010070704410861412
+      },
+      {
+        "feature": "numeric__V55",
+        "total_gain": 554.8084106445312,
+        "normalized_total_gain": 0.0009819220575577438
+      },
+      {
+        "feature": "numeric__V59",
+        "total_gain": 547.5896606445312,
+        "normalized_total_gain": 0.0009691460258376038
+      },
+      {
+        "feature": "numeric__V99",
+        "total_gain": 520.5739135742188,
+        "normalized_total_gain": 0.0009213324789612623
+      },
+      {
+        "feature": "numeric__V102",
+        "total_gain": 519.9629516601562,
+        "normalized_total_gain": 0.0009202511741932817
+      },
+      {
+        "feature": "numeric__V127",
+        "total_gain": 506.69512939453125,
+        "normalized_total_gain": 0.0008967692530680448
+      },
+      {
+        "feature": "numeric__V35",
+        "total_gain": 504.4543762207031,
+        "normalized_total_gain": 0.0008928034787129511
+      },
+      {
+        "feature": "numeric__V37",
+        "total_gain": 491.6021423339844,
+        "normalized_total_gain": 0.0008700570824793406
+      },
+      {
+        "feature": "numeric__V291",
+        "total_gain": 473.842041015625,
+        "normalized_total_gain": 0.0008386245466807246
+      },
+      {
+        "feature": "numeric__V333",
+        "total_gain": 470.3858947753906,
+        "normalized_total_gain": 0.0008325077211922845
+      },
+      {
+        "feature": "numeric__D14",
+        "total_gain": 467.1543884277344,
+        "normalized_total_gain": 0.0008267884723470565
+      },
+      {
+        "feature": "numeric__V205",
+        "total_gain": 457.7451171875,
+        "normalized_total_gain": 0.0008101355687517478
+      },
+      {
+        "feature": "numeric__V90",
+        "total_gain": 447.24029541015625,
+        "normalized_total_gain": 0.0007915437161121965
+      },
+      {
+        "feature": "numeric__V96",
+        "total_gain": 446.54632568359375,
+        "normalized_total_gain": 0.0007903155008063084
+      },
+      {
+        "feature": "numeric__V128",
+        "total_gain": 439.76641845703125,
+        "normalized_total_gain": 0.0007783161505328998
+      },
+      {
+        "feature": "numeric__V203",
+        "total_gain": 428.523193359375,
+        "normalized_total_gain": 0.0007584174422406982
+      },
+      {
+        "feature": "numeric__D6",
+        "total_gain": 425.67559814453125,
+        "normalized_total_gain": 0.0007533776546332922
+      },
+      {
+        "feature": "numeric__V287",
+        "total_gain": 410.99835205078125,
+        "normalized_total_gain": 0.0007274012789923502
+      },
+      {
+        "feature": "numeric__V15",
+        "total_gain": 408.3339538574219,
+        "normalized_total_gain": 0.0007226857207816568
+      },
+      {
+        "feature": "categorical__M2",
+        "total_gain": 394.17327880859375,
+        "normalized_total_gain": 0.0006976235931830528
+      },
+      {
+        "feature": "numeric__V160",
+        "total_gain": 386.1671447753906,
+        "normalized_total_gain": 0.0006834540177906518
+      },
+      {
+        "feature": "numeric__V164",
+        "total_gain": 370.1179504394531,
+        "normalized_total_gain": 0.0006550495134209717
+      },
+      {
+        "feature": "numeric__V79",
+        "total_gain": 367.1705627441406,
+        "normalized_total_gain": 0.0006498331091007136
+      },
+      {
+        "feature": "numeric__V73",
+        "total_gain": 364.0771179199219,
+        "normalized_total_gain": 0.0006443582070472111
+      },
+      {
+        "feature": "numeric__V86",
+        "total_gain": 363.68170166015625,
+        "normalized_total_gain": 0.0006436583835767453
+      },
+      {
+        "feature": "numeric__V36",
+        "total_gain": 352.4942932128906,
+        "normalized_total_gain": 0.0006238584618190412
+      },
+      {
+        "feature": "numeric__V161",
+        "total_gain": 343.4095153808594,
+        "normalized_total_gain": 0.0006077798596022507
+      },
+      {
+        "feature": "numeric__V262",
+        "total_gain": 342.7765197753906,
+        "normalized_total_gain": 0.0006066595587282521
+      },
+      {
+        "feature": "numeric__V227",
+        "total_gain": 339.1581726074219,
+        "normalized_total_gain": 0.0006002556635673936
+      },
+      {
+        "feature": "numeric__V232",
+        "total_gain": 334.3178405761719,
+        "normalized_total_gain": 0.0005916890508481195
+      },
+      {
+        "feature": "numeric__V316",
+        "total_gain": 330.9223327636719,
+        "normalized_total_gain": 0.00058567954566807
+      },
+      {
+        "feature": "numeric__V66",
+        "total_gain": 327.8829650878906,
+        "normalized_total_gain": 0.0005803003515091159
+      },
+      {
+        "feature": "numeric__D12",
+        "total_gain": 321.5187072753906,
+        "normalized_total_gain": 0.000569036634149788
+      },
+      {
+        "feature": "numeric__V275",
+        "total_gain": 313.9400634765625,
+        "normalized_total_gain": 0.0005556236480276103
+      },
+      {
+        "feature": "numeric__V332",
+        "total_gain": 311.84881591796875,
+        "normalized_total_gain": 0.0005519224746744316
+      },
+      {
+        "feature": "numeric__V5",
+        "total_gain": 307.7899475097656,
+        "normalized_total_gain": 0.0005447389274493474
+      },
+      {
+        "feature": "numeric__V256",
+        "total_gain": 307.60162353515625,
+        "normalized_total_gain": 0.0005444056241664698
+      },
+      {
+        "feature": "numeric__V280",
+        "total_gain": 301.2779541015625,
+        "normalized_total_gain": 0.0005332137417392804
+      },
+      {
+        "feature": "numeric__V197",
+        "total_gain": 300.5136413574219,
+        "normalized_total_gain": 0.0005318610305547613
+      },
+      {
+        "feature": "numeric__V279",
+        "total_gain": 300.46881103515625,
+        "normalized_total_gain": 0.0005317816880620458
+      },
+      {
+        "feature": "numeric__V136",
+        "total_gain": 297.1766357421875,
+        "normalized_total_gain": 0.0005259550648972002
+      },
+      {
+        "feature": "numeric__V245",
+        "total_gain": 294.6408996582031,
+        "normalized_total_gain": 0.0005214672180202633
+      },
+      {
+        "feature": "numeric__V47",
+        "total_gain": 292.1558532714844,
+        "normalized_total_gain": 0.0005170690837916589
+      },
+      {
+        "feature": "numeric__V331",
+        "total_gain": 289.1886901855469,
+        "normalized_total_gain": 0.0005118176801961934
+      },
+      {
+        "feature": "numeric__V250",
+        "total_gain": 288.9648742675781,
+        "normalized_total_gain": 0.0005114215618561151
+      },
+      {
+        "feature": "numeric__V139",
+        "total_gain": 285.909912109375,
+        "normalized_total_gain": 0.0005060147679600762
+      },
+      {
+        "feature": "numeric__V302",
+        "total_gain": 282.4073181152344,
+        "normalized_total_gain": 0.0004998157373838807
+      },
+      {
+        "feature": "numeric__V267",
+        "total_gain": 281.7521057128906,
+        "normalized_total_gain": 0.0004986561163365009
+      },
+      {
+        "feature": "numeric__V272",
+        "total_gain": 280.9678649902344,
+        "normalized_total_gain": 0.0004972681358206384
+      },
+      {
+        "feature": "numeric__V264",
+        "total_gain": 278.7566223144531,
+        "normalized_total_gain": 0.0004933545903222199
+      },
+      {
+        "feature": "numeric__V94",
+        "total_gain": 276.4104919433594,
+        "normalized_total_gain": 0.0004892023151997018
+      },
+      {
+        "feature": "numeric__V63",
+        "total_gain": 276.1009216308594,
+        "normalized_total_gain": 0.0004886544253112705
+      },
+      {
+        "feature": "numeric__V222",
+        "total_gain": 275.7369384765625,
+        "normalized_total_gain": 0.0004880102334047918
+      },
+      {
+        "feature": "numeric__V270",
+        "total_gain": 275.0419616699219,
+        "normalized_total_gain": 0.00048678023572840703
+      },
+      {
+        "feature": "numeric__V64",
+        "total_gain": 272.4847106933594,
+        "normalized_total_gain": 0.00048225431093631407
+      },
+      {
+        "feature": "numeric__V277",
+        "total_gain": 272.00067138671875,
+        "normalized_total_gain": 0.0004813976388621412
+      },
+      {
+        "feature": "numeric__V265",
+        "total_gain": 270.20062255859375,
+        "normalized_total_gain": 0.00047821184063863637
+      },
+      {
+        "feature": "numeric__C3",
+        "total_gain": 267.4359436035156,
+        "normalized_total_gain": 0.00047331880153545625
+      },
+      {
+        "feature": "numeric__V336",
+        "total_gain": 266.3191223144531,
+        "normalized_total_gain": 0.0004713422066658749
+      },
+      {
+        "feature": "numeric__V289",
+        "total_gain": 263.6565246582031,
+        "normalized_total_gain": 0.00046662983511758466
+      },
+      {
+        "feature": "numeric__V33",
+        "total_gain": 262.017578125,
+        "normalized_total_gain": 0.00046372916216232005
+      },
+      {
+        "feature": "numeric__V217",
+        "total_gain": 261.81585693359375,
+        "normalized_total_gain": 0.00046337214795071405
+      },
+      {
+        "feature": "numeric__V335",
+        "total_gain": 261.6187744140625,
+        "normalized_total_gain": 0.0004630233434456382
+      },
+      {
+        "feature": "numeric__V3",
+        "total_gain": 261.3814697265625,
+        "normalized_total_gain": 0.00046260335214314983
+      },
+      {
+        "feature": "numeric__V246",
+        "total_gain": 259.1932067871094,
+        "normalized_total_gain": 0.00045873047709879176
+      },
+      {
+        "feature": "numeric__V300",
+        "total_gain": 257.6196594238281,
+        "normalized_total_gain": 0.0004559455502033564
+      },
+      {
+        "feature": "numeric__V124",
+        "total_gain": 254.3660125732422,
+        "normalized_total_gain": 0.0004501871162128152
+      },
+      {
+        "feature": "numeric__V293",
+        "total_gain": 251.59742736816406,
+        "normalized_total_gain": 0.0004452871636725571
+      },
+      {
+        "feature": "numeric__V234",
+        "total_gain": 242.95631408691406,
+        "normalized_total_gain": 0.0004299937766763912
+      },
+      {
+        "feature": "numeric__V126",
+        "total_gain": 242.5042266845703,
+        "normalized_total_gain": 0.0004291936543570673
+      },
+      {
+        "feature": "numeric__V303",
+        "total_gain": 241.3200225830078,
+        "normalized_total_gain": 0.0004270978026978905
+      },
+      {
+        "feature": "numeric__V26",
+        "total_gain": 239.37948608398438,
+        "normalized_total_gain": 0.0004236633637901
+      },
+      {
+        "feature": "numeric__V155",
+        "total_gain": 234.3582305908203,
+        "normalized_total_gain": 0.0004147765455105376
+      },
+      {
+        "feature": "numeric__V43",
+        "total_gain": 231.4676055908203,
+        "normalized_total_gain": 0.00040966060207281923
+      },
+      {
+        "feature": "numeric__V178",
+        "total_gain": 227.34547424316406,
+        "normalized_total_gain": 0.0004023650895738077
+      },
+      {
+        "feature": "numeric__V74",
+        "total_gain": 225.76953125,
+        "normalized_total_gain": 0.00039957592279703935
+      },
+      {
+        "feature": "numeric__V326",
+        "total_gain": 223.26571655273438,
+        "normalized_total_gain": 0.0003951445716637243
+      },
+      {
+        "feature": "numeric__V273",
+        "total_gain": 221.85836791992188,
+        "normalized_total_gain": 0.0003926537899114669
+      },
+      {
+        "feature": "numeric__V224",
+        "total_gain": 217.84825134277344,
+        "normalized_total_gain": 0.00038555652562178964
+      },
+      {
+        "feature": "numeric__V172",
+        "total_gain": 216.14149475097656,
+        "normalized_total_gain": 0.0003825358397197492
+      },
+      {
+        "feature": "numeric__V208",
+        "total_gain": 214.9472198486328,
+        "normalized_total_gain": 0.0003804221643556057
+      },
+      {
+        "feature": "numeric__V216",
+        "total_gain": 209.0130615234375,
+        "normalized_total_gain": 0.0003699196542264243
+      },
+      {
+        "feature": "numeric__V276",
+        "total_gain": 207.4622802734375,
+        "normalized_total_gain": 0.0003671750197064592
+      },
+      {
+        "feature": "numeric__V171",
+        "total_gain": 205.7550048828125,
+        "normalized_total_gain": 0.0003641534156135568
+      },
+      {
+        "feature": "numeric__V221",
+        "total_gain": 204.7596435546875,
+        "normalized_total_gain": 0.00036239178542811945
+      },
+      {
+        "feature": "numeric__D7",
+        "total_gain": 200.16839599609375,
+        "normalized_total_gain": 0.00035426601234502214
+      },
+      {
+        "feature": "numeric__V301",
+        "total_gain": 195.66893005371094,
+        "normalized_total_gain": 0.00034630267802764417
+      },
+      {
+        "feature": "numeric__V135",
+        "total_gain": 194.81680297851562,
+        "normalized_total_gain": 0.000344794549536938
+      },
+      {
+        "feature": "numeric__V290",
+        "total_gain": 193.67214965820312,
+        "normalized_total_gain": 0.0003427686964281759
+      },
+      {
+        "feature": "numeric__V69",
+        "total_gain": 192.55165100097656,
+        "normalized_total_gain": 0.0003407855932057204
+      },
+      {
+        "feature": "numeric__V7",
+        "total_gain": 185.08079528808594,
+        "normalized_total_gain": 0.0003275633747379137
+      },
+      {
+        "feature": "numeric__V214",
+        "total_gain": 181.2299041748047,
+        "normalized_total_gain": 0.0003207479140260057
+      },
+      {
+        "feature": "numeric__V306",
+        "total_gain": 180.4837188720703,
+        "normalized_total_gain": 0.00031942728551042656
+      },
+      {
+        "feature": "numeric__V304",
+        "total_gain": 177.86355590820312,
+        "normalized_total_gain": 0.0003147900165735188
+      },
+      {
+        "feature": "numeric__V17",
+        "total_gain": 177.68019104003906,
+        "normalized_total_gain": 0.00031446549011505666
+      },
+      {
+        "feature": "numeric__V243",
+        "total_gain": 174.0662841796875,
+        "normalized_total_gain": 0.0003080694535877517
+      },
+      {
+        "feature": "numeric__V169",
+        "total_gain": 173.3773651123047,
+        "normalized_total_gain": 0.0003068501771399606
+      },
+      {
+        "feature": "numeric__V192",
+        "total_gain": 172.9344940185547,
+        "normalized_total_gain": 0.00030606636621124256
+      },
+      {
+        "feature": "numeric__addr2",
+        "total_gain": 171.99453735351562,
+        "normalized_total_gain": 0.00030440279340873574
+      },
+      {
+        "feature": "numeric__V215",
+        "total_gain": 167.5865478515625,
+        "normalized_total_gain": 0.0002966013577448054
+      },
+      {
+        "feature": "numeric__V254",
+        "total_gain": 167.332763671875,
+        "normalized_total_gain": 0.0002961522003796443
+      },
+      {
+        "feature": "numeric__V134",
+        "total_gain": 167.17710876464844,
+        "normalized_total_gain": 0.0002958767161154542
+      },
+      {
+        "feature": "numeric__V23",
+        "total_gain": 164.7438201904297,
+        "normalized_total_gain": 0.0002915701849281333
+      },
+      {
+        "feature": "numeric__V4",
+        "total_gain": 162.79954528808594,
+        "normalized_total_gain": 0.0002881291296450142
+      },
+      {
+        "feature": "numeric__V2",
+        "total_gain": 161.8512420654297,
+        "normalized_total_gain": 0.0002864507847718759
+      },
+      {
+        "feature": "numeric__V167",
+        "total_gain": 161.48585510253906,
+        "normalized_total_gain": 0.00028580410834894724
+      },
+      {
+        "feature": "numeric__V51",
+        "total_gain": 160.77279663085938,
+        "normalized_total_gain": 0.0002845421090204632
+      },
+      {
+        "feature": "numeric__V271",
+        "total_gain": 159.73411560058594,
+        "normalized_total_gain": 0.00028270380989805545
+      },
+      {
+        "feature": "numeric__V81",
+        "total_gain": 155.9617462158203,
+        "normalized_total_gain": 0.0002760273200736606
+      },
+      {
+        "feature": "numeric__V251",
+        "total_gain": 153.03036499023438,
+        "normalized_total_gain": 0.00027083924464205416
+      },
+      {
+        "feature": "numeric__V57",
+        "total_gain": 151.06741333007812,
+        "normalized_total_gain": 0.00026736513448790593
+      },
+      {
+        "feature": "categorical__M9",
+        "total_gain": 150.8900909423828,
+        "normalized_total_gain": 0.00026705130225242386
+      },
+      {
+        "feature": "numeric__V278",
+        "total_gain": 149.38987731933594,
+        "normalized_total_gain": 0.0002643961643358825
+      },
+      {
+        "feature": "numeric__V48",
+        "total_gain": 148.4812469482422,
+        "normalized_total_gain": 0.0002627880340580676
+      },
+      {
+        "feature": "numeric__V292",
+        "total_gain": 147.9727783203125,
+        "normalized_total_gain": 0.0002618881259965437
+      },
+      {
+        "feature": "numeric__V150",
+        "total_gain": 147.96144104003906,
+        "normalized_total_gain": 0.0002618680608256493
+      },
+      {
+        "feature": "numeric__V244",
+        "total_gain": 146.29934692382812,
+        "normalized_total_gain": 0.00025892642035457486
+      },
+      {
+        "feature": "numeric__V29",
+        "total_gain": 144.9124755859375,
+        "normalized_total_gain": 0.0002564718801357498
+      },
+      {
+        "feature": "numeric__V142",
+        "total_gain": 144.31695556640625,
+        "normalized_total_gain": 0.0002554179050487181
+      },
+      {
+        "feature": "numeric__V198",
+        "total_gain": 142.9804229736328,
+        "normalized_total_gain": 0.00025305245634911304
+      },
+      {
+        "feature": "numeric__V34",
+        "total_gain": 142.56353759765625,
+        "normalized_total_gain": 0.0002523146359803319
+      },
+      {
+        "feature": "numeric__V147",
+        "total_gain": 139.3398895263672,
+        "normalized_total_gain": 0.0002466092950261006
+      },
+      {
+        "feature": "numeric__V115",
+        "total_gain": 139.25437927246094,
+        "normalized_total_gain": 0.00024645795556756507
+      },
+      {
+        "feature": "numeric__V132",
+        "total_gain": 138.1020050048828,
+        "normalized_total_gain": 0.00024441843761832855
+      },
+      {
+        "feature": "numeric__V40",
+        "total_gain": 134.45242309570312,
+        "normalized_total_gain": 0.00023795926196645964
+      },
+      {
+        "feature": "numeric__V175",
+        "total_gain": 133.79722595214844,
+        "normalized_total_gain": 0.00023679966792469344
+      },
+      {
+        "feature": "numeric__V263",
+        "total_gain": 133.34124755859375,
+        "normalized_total_gain": 0.0002359926591739051
+      },
+      {
+        "feature": "numeric__V58",
+        "total_gain": 132.70950317382812,
+        "normalized_total_gain": 0.00023487457276022048
+      },
+      {
+        "feature": "numeric__V274",
+        "total_gain": 132.41604614257812,
+        "normalized_total_gain": 0.0002343552007997359
+      },
+      {
+        "feature": "numeric__V210",
+        "total_gain": 132.14678955078125,
+        "normalized_total_gain": 0.0002338786597423986
+      },
+      {
+        "feature": "numeric__V298",
+        "total_gain": 129.63632202148438,
+        "normalized_total_gain": 0.00022943553416156006
+      },
+      {
+        "feature": "numeric__V25",
+        "total_gain": 129.1183319091797,
+        "normalized_total_gain": 0.00022851877459715853
+      },
+      {
+        "feature": "numeric__V72",
+        "total_gain": 124.0192642211914,
+        "normalized_total_gain": 0.00021949424119111467
+      },
+      {
+        "feature": "numeric__V288",
+        "total_gain": 122.71897888183594,
+        "normalized_total_gain": 0.00021719294432658294
+      },
+      {
+        "feature": "numeric__V151",
+        "total_gain": 121.34548950195312,
+        "normalized_total_gain": 0.00021476208803087273
+      },
+      {
+        "feature": "numeric__V180",
+        "total_gain": 119.91607666015625,
+        "normalized_total_gain": 0.00021223225616137008
+      },
+      {
+        "feature": "numeric__V166",
+        "total_gain": 118.88278198242188,
+        "normalized_total_gain": 0.00021040349002055816
+      },
+      {
+        "feature": "numeric__V137",
+        "total_gain": 118.1168441772461,
+        "normalized_total_gain": 0.00020904790273819205
+      },
+      {
+        "feature": "numeric__V159",
+        "total_gain": 116.9319839477539,
+        "normalized_total_gain": 0.00020695088983763109
+      },
+      {
+        "feature": "numeric__V92",
+        "total_gain": 115.60294342041016,
+        "normalized_total_gain": 0.00020459870089429668
+      },
+      {
+        "feature": "numeric__V206",
+        "total_gain": 115.5750503540039,
+        "normalized_total_gain": 0.0002045493346326616
+      },
+      {
+        "feature": "numeric__V123",
+        "total_gain": 113.81254577636719,
+        "normalized_total_gain": 0.0002014299837213849
+      },
+      {
+        "feature": "numeric__V286",
+        "total_gain": 113.79830169677734,
+        "normalized_total_gain": 0.00020140477398110246
+      },
+      {
+        "feature": "numeric__V85",
+        "total_gain": 113.07032775878906,
+        "normalized_total_gain": 0.00020011637666533815
+      },
+      {
+        "feature": "numeric__V259",
+        "total_gain": 112.88458251953125,
+        "normalized_total_gain": 0.00019978763733115664
+      },
+      {
+        "feature": "numeric__V108",
+        "total_gain": 112.53777313232422,
+        "normalized_total_gain": 0.00019917384024276886
+      },
+      {
+        "feature": "numeric__V219",
+        "total_gain": 111.61640167236328,
+        "normalized_total_gain": 0.0001975431602776097
+      },
+      {
+        "feature": "numeric__V211",
+        "total_gain": 110.9753646850586,
+        "normalized_total_gain": 0.00019640862744525127
+      },
+      {
+        "feature": "numeric__V39",
+        "total_gain": 108.42241668701172,
+        "normalized_total_gain": 0.0001918903182361895
+      },
+      {
+        "feature": "numeric__V52",
+        "total_gain": 108.2424545288086,
+        "normalized_total_gain": 0.00019157181402955703
+      },
+      {
+        "feature": "numeric__V173",
+        "total_gain": 104.27935028076172,
+        "normalized_total_gain": 0.00018455775403533806
+      },
+      {
+        "feature": "numeric__V223",
+        "total_gain": 101.30103302001953,
+        "normalized_total_gain": 0.00017928660933634136
+      },
+      {
+        "feature": "numeric__V319",
+        "total_gain": 98.66852569580078,
+        "normalized_total_gain": 0.00017462749285804255
+      },
+      {
+        "feature": "numeric__V145",
+        "total_gain": 96.63129425048828,
+        "normalized_total_gain": 0.000171021919376958
+      },
+      {
+        "feature": "numeric__V188",
+        "total_gain": 96.48816680908203,
+        "normalized_total_gain": 0.000170768606721522
+      },
+      {
+        "feature": "numeric__V212",
+        "total_gain": 95.46216583251953,
+        "normalized_total_gain": 0.00016895274926400413
+      },
+      {
+        "feature": "categorical__M8",
+        "total_gain": 94.9942398071289,
+        "normalized_total_gain": 0.00016812459511777802
+      },
+      {
+        "feature": "numeric__V6",
+        "total_gain": 93.40209197998047,
+        "normalized_total_gain": 0.00016530674837938143
+      },
+      {
+        "feature": "numeric__V199",
+        "total_gain": 93.19207000732422,
+        "normalized_total_gain": 0.00016493504311398472
+      },
+      {
+        "feature": "numeric__V321",
+        "total_gain": 92.91636657714844,
+        "normalized_total_gain": 0.00016444709218490735
+      },
+      {
+        "feature": "numeric__V162",
+        "total_gain": 90.19692993164062,
+        "normalized_total_gain": 0.00015963412472600952
+      },
+      {
+        "feature": "numeric__V260",
+        "total_gain": 87.22132873535156,
+        "normalized_total_gain": 0.0001543677870262311
+      },
+      {
+        "feature": "numeric__V168",
+        "total_gain": 86.98854064941406,
+        "normalized_total_gain": 0.00015395578938536418
+      },
+      {
+        "feature": "numeric__V170",
+        "total_gain": 85.43063354492188,
+        "normalized_total_gain": 0.0001511985432438544
+      },
+      {
+        "feature": "numeric__V229",
+        "total_gain": 83.87335205078125,
+        "normalized_total_gain": 0.00014844240433250168
+      },
+      {
+        "feature": "numeric__V42",
+        "total_gain": 83.56602478027344,
+        "normalized_total_gain": 0.00014789848426926747
+      },
+      {
+        "feature": "numeric__V46",
+        "total_gain": 82.77276611328125,
+        "normalized_total_gain": 0.0001464945434357758
+      },
+      {
+        "feature": "numeric__V100",
+        "total_gain": 82.72843170166016,
+        "normalized_total_gain": 0.00014641607862550188
+      },
+      {
+        "feature": "categorical__M7",
+        "total_gain": 81.87519073486328,
+        "normalized_total_gain": 0.0001449059787250039
+      },
+      {
+        "feature": "numeric__V213",
+        "total_gain": 80.67223358154297,
+        "normalized_total_gain": 0.00014277693716673002
+      },
+      {
+        "feature": "numeric__V157",
+        "total_gain": 76.36299133300781,
+        "normalized_total_gain": 0.00013515026833112103
+      },
+      {
+        "feature": "numeric__V16",
+        "total_gain": 76.15158081054688,
+        "normalized_total_gain": 0.000134776105554888
+      },
+      {
+        "feature": "numeric__V209",
+        "total_gain": 75.68461608886719,
+        "normalized_total_gain": 0.00013394965276231782
+      },
+      {
+        "feature": "numeric__V233",
+        "total_gain": 73.41494750976562,
+        "normalized_total_gain": 0.00012993270276947882
+      },
+      {
+        "feature": "numeric__V202",
+        "total_gain": 72.14493560791016,
+        "normalized_total_gain": 0.00012768498504230156
+      },
+      {
+        "feature": "numeric__V220",
+        "total_gain": 70.56957244873047,
+        "normalized_total_gain": 0.0001248968444788495
+      },
+      {
+        "feature": "numeric__V218",
+        "total_gain": 69.51734161376953,
+        "normalized_total_gain": 0.00012303456437157741
+      },
+      {
+        "feature": "numeric__V248",
+        "total_gain": 69.43888092041016,
+        "normalized_total_gain": 0.00012289570150651857
+      },
+      {
+        "feature": "numeric__V93",
+        "total_gain": 67.47237396240234,
+        "normalized_total_gain": 0.00011941529904440482
+      },
+      {
+        "feature": "numeric__V146",
+        "total_gain": 65.60818481445312,
+        "normalized_total_gain": 0.0001161159827241915
+      },
+      {
+        "feature": "numeric__V191",
+        "total_gain": 65.18701934814453,
+        "normalized_total_gain": 0.00011537058728079947
+      },
+      {
+        "feature": "numeric__V125",
+        "total_gain": 64.80823516845703,
+        "normalized_total_gain": 0.00011470019992914238
+      },
+      {
+        "feature": "numeric__V18",
+        "total_gain": 60.526710510253906,
+        "normalized_total_gain": 0.00010712258679061223
+      },
+      {
+        "feature": "numeric__V184",
+        "total_gain": 60.393707275390625,
+        "normalized_total_gain": 0.00010688719235979049
+      },
+      {
+        "feature": "numeric__V140",
+        "total_gain": 59.47792053222656,
+        "normalized_total_gain": 0.00010526639644920379
+      },
+      {
+        "feature": "numeric__V339",
+        "total_gain": 59.070884704589844,
+        "normalized_total_gain": 0.00010454600820399233
+      },
+      {
+        "feature": "numeric__V50",
+        "total_gain": 58.492183685302734,
+        "normalized_total_gain": 0.00010352180005453579
+      },
+      {
+        "feature": "numeric__V185",
+        "total_gain": 57.5168342590332,
+        "normalized_total_gain": 0.00010179558773131642
+      },
+      {
+        "feature": "numeric__V144",
+        "total_gain": 55.38984680175781,
+        "normalized_total_gain": 9.803116047971605e-05
+      },
+      {
+        "feature": "numeric__V204",
+        "total_gain": 55.243133544921875,
+        "normalized_total_gain": 9.777150150508735e-05
+      },
+      {
+        "feature": "numeric__V226",
+        "total_gain": 54.601234436035156,
+        "normalized_total_gain": 9.663544285556128e-05
+      },
+      {
+        "feature": "numeric__V101",
+        "total_gain": 53.48568344116211,
+        "normalized_total_gain": 9.466109620331099e-05
+      },
+      {
+        "feature": "numeric__V230",
+        "total_gain": 52.36749267578125,
+        "normalized_total_gain": 9.268207757991034e-05
+      },
+      {
+        "feature": "numeric__V284",
+        "total_gain": 51.37361526489258,
+        "normalized_total_gain": 9.092307369039426e-05
+      },
+      {
+        "feature": "numeric__V10",
+        "total_gain": 48.68571472167969,
+        "normalized_total_gain": 8.616592008337514e-05
+      },
+      {
+        "feature": "numeric__V225",
+        "total_gain": 46.20172882080078,
+        "normalized_total_gain": 8.176966274491497e-05
+      },
+      {
+        "feature": "numeric__V60",
+        "total_gain": 45.83393859863281,
+        "normalized_total_gain": 8.111873293784653e-05
+      },
+      {
+        "feature": "numeric__V329",
+        "total_gain": 44.998146057128906,
+        "normalized_total_gain": 7.963951395648406e-05
+      },
+      {
+        "feature": "numeric__V8",
+        "total_gain": 44.43638610839844,
+        "normalized_total_gain": 7.86452887895113e-05
+      },
+      {
+        "feature": "numeric__V176",
+        "total_gain": 44.43442916870117,
+        "normalized_total_gain": 7.864182531956891e-05
+      },
+      {
+        "feature": "numeric__V182",
+        "total_gain": 44.146949768066406,
+        "normalized_total_gain": 7.813303280820661e-05
+      },
+      {
+        "feature": "numeric__V253",
+        "total_gain": 43.99330520629883,
+        "normalized_total_gain": 7.78611065336065e-05
+      },
+      {
+        "feature": "numeric__V235",
+        "total_gain": 43.55964660644531,
+        "normalized_total_gain": 7.709360024409099e-05
+      },
+      {
+        "feature": "numeric__V31",
+        "total_gain": 43.18828201293945,
+        "normalized_total_gain": 7.643634437204005e-05
+      },
+      {
+        "feature": "numeric__V148",
+        "total_gain": 41.8685302734375,
+        "normalized_total_gain": 7.410059509597608e-05
+      },
+      {
+        "feature": "numeric__V105",
+        "total_gain": 41.582218170166016,
+        "normalized_total_gain": 7.35938685140531e-05
+      },
+      {
+        "feature": "numeric__V179",
+        "total_gain": 41.55910873413086,
+        "normalized_total_gain": 7.355296851227722e-05
+      },
+      {
+        "feature": "numeric__V141",
+        "total_gain": 41.148406982421875,
+        "normalized_total_gain": 7.282609216840175e-05
+      },
+      {
+        "feature": "numeric__V196",
+        "total_gain": 40.20279312133789,
+        "normalized_total_gain": 7.115250703465795e-05
+      },
+      {
+        "feature": "numeric__V238",
+        "total_gain": 39.656402587890625,
+        "normalized_total_gain": 7.018548327196962e-05
+      },
+      {
+        "feature": "numeric__V237",
+        "total_gain": 39.485557556152344,
+        "normalized_total_gain": 6.988311491945477e-05
+      },
+      {
+        "feature": "numeric__V186",
+        "total_gain": 37.751930236816406,
+        "normalized_total_gain": 6.681487213188944e-05
+      },
+      {
+        "feature": "numeric__V327",
+        "total_gain": 37.577945709228516,
+        "normalized_total_gain": 6.650694737437929e-05
+      },
+      {
+        "feature": "numeric__V228",
+        "total_gain": 36.2994384765625,
+        "normalized_total_gain": 6.424419427183808e-05
+      },
+      {
+        "feature": "numeric__V109",
+        "total_gain": 35.88655090332031,
+        "normalized_total_gain": 6.351344937381642e-05
+      },
+      {
+        "feature": "numeric__V11",
+        "total_gain": 35.15872573852539,
+        "normalized_total_gain": 6.22253153627846e-05
+      },
+      {
+        "feature": "numeric__V103",
+        "total_gain": 34.60920333862305,
+        "normalized_total_gain": 6.125274869790775e-05
+      },
+      {
+        "feature": "numeric__V299",
+        "total_gain": 33.25165557861328,
+        "normalized_total_gain": 5.885010651699142e-05
+      },
+      {
+        "feature": "numeric__V252",
+        "total_gain": 33.21194839477539,
+        "normalized_total_gain": 5.8779831159037436e-05
+      },
+      {
+        "feature": "numeric__V190",
+        "total_gain": 32.396846771240234,
+        "normalized_total_gain": 5.733723178969749e-05
+      },
+      {
+        "feature": "numeric__V9",
+        "total_gain": 30.927959442138672,
+        "normalized_total_gain": 5.473753639784804e-05
+      },
+      {
+        "feature": "numeric__V80",
+        "total_gain": 30.68972396850586,
+        "normalized_total_gain": 5.431589775293094e-05
+      },
+      {
+        "feature": "numeric__V22",
+        "total_gain": 30.16115951538086,
+        "normalized_total_gain": 5.3380423298314356e-05
+      },
+      {
+        "feature": "numeric__V330",
+        "total_gain": 29.881046295166016,
+        "normalized_total_gain": 5.2884667746910666e-05
+      },
+      {
+        "feature": "numeric__V297",
+        "total_gain": 29.73670196533203,
+        "normalized_total_gain": 5.262920139379118e-05
+      },
+      {
+        "feature": "numeric__V84",
+        "total_gain": 29.211315155029297,
+        "normalized_total_gain": 5.169935085820387e-05
+      },
+      {
+        "feature": "numeric__V97",
+        "total_gain": 28.769641876220703,
+        "normalized_total_gain": 5.091765987015236e-05
+      },
+      {
+        "feature": "numeric__V183",
+        "total_gain": 27.753698348999023,
+        "normalized_total_gain": 4.9119602487689325e-05
+      },
+      {
+        "feature": "numeric__V255",
+        "total_gain": 23.816368103027344,
+        "normalized_total_gain": 4.2151158350518675e-05
+      },
+      {
+        "feature": "numeric__V242",
+        "total_gain": 23.158458709716797,
+        "normalized_total_gain": 4.0986764060937577e-05
+      },
+      {
+        "feature": "numeric__V95",
+        "total_gain": 22.638957977294922,
+        "normalized_total_gain": 4.0067330940791035e-05
+      },
+      {
+        "feature": "numeric__V322",
+        "total_gain": 21.848426818847656,
+        "normalized_total_gain": 3.8668217360727836e-05
+      },
+      {
+        "feature": "numeric__V249",
+        "total_gain": 19.811458587646484,
+        "normalized_total_gain": 3.5063109726477646e-05
+      },
+      {
+        "feature": "numeric__V174",
+        "total_gain": 19.501564025878906,
+        "normalized_total_gain": 3.451464596875762e-05
+      },
+      {
+        "feature": "numeric__V111",
+        "total_gain": 18.684955596923828,
+        "normalized_total_gain": 3.306937979507606e-05
+      },
+      {
+        "feature": "numeric__V138",
+        "total_gain": 18.240049362182617,
+        "normalized_total_gain": 3.2281966992646036e-05
+      },
+      {
+        "feature": "numeric__V158",
+        "total_gain": 17.31473159790039,
+        "normalized_total_gain": 3.064430270067323e-05
+      },
+      {
+        "feature": "numeric__V21",
+        "total_gain": 17.065168380737305,
+        "normalized_total_gain": 3.020261576337027e-05
+      },
+      {
+        "feature": "numeric__V153",
+        "total_gain": 15.953170776367188,
+        "normalized_total_gain": 2.823455804338381e-05
+      },
+      {
+        "feature": "numeric__V118",
+        "total_gain": 15.144903182983398,
+        "normalized_total_gain": 2.6804053813228663e-05
+      },
+      {
+        "feature": "numeric__V337",
+        "total_gain": 14.743833541870117,
+        "normalized_total_gain": 2.6094224762929312e-05
+      },
+      {
+        "feature": "numeric__V334",
+        "total_gain": 14.497970581054688,
+        "normalized_total_gain": 2.565908668692094e-05
+      },
+      {
+        "feature": "numeric__V338",
+        "total_gain": 12.977136611938477,
+        "normalized_total_gain": 2.2967454059319893e-05
+      },
+      {
+        "feature": "numeric__V98",
+        "total_gain": 12.631513595581055,
+        "normalized_total_gain": 2.2355756657388413e-05
+      },
+      {
+        "feature": "numeric__V177",
+        "total_gain": 12.553228378295898,
+        "normalized_total_gain": 2.2217204356885805e-05
+      },
+      {
+        "feature": "numeric__V106",
+        "total_gain": 12.30595588684082,
+        "normalized_total_gain": 2.1779571637322427e-05
+      },
+      {
+        "feature": "numeric__V154",
+        "total_gain": 11.602068901062012,
+        "normalized_total_gain": 2.0533804370454377e-05
+      },
+      {
+        "feature": "numeric__V32",
+        "total_gain": 11.504645347595215,
+        "normalized_total_gain": 2.0361380279111617e-05
+      },
+      {
+        "feature": "numeric__V104",
+        "total_gain": 10.728034973144531,
+        "normalized_total_gain": 1.8986904257893025e-05
+      },
+      {
+        "feature": "numeric__V269",
+        "total_gain": 10.328447341918945,
+        "normalized_total_gain": 1.827969812781321e-05
+      },
+      {
+        "feature": "numeric__V112",
+        "total_gain": 8.685495376586914,
+        "normalized_total_gain": 1.5371936198982276e-05
+      },
+      {
+        "feature": "numeric__V116",
+        "total_gain": 7.006444931030273,
+        "normalized_total_gain": 1.240028573981043e-05
+      },
+      {
+        "feature": "numeric__V181",
+        "total_gain": 6.8379225730896,
+        "normalized_total_gain": 1.210202814803861e-05
+      },
+      {
+        "feature": "numeric__V114",
+        "total_gain": 4.2161712646484375,
+        "normalized_total_gain": 7.461948095541612e-06
+      },
+      {
+        "feature": "numeric__V328",
+        "total_gain": 3.333465576171875,
+        "normalized_total_gain": 5.899700355209208e-06
+      },
+      {
+        "feature": "numeric__V195",
+        "total_gain": 3.0139050483703613,
+        "normalized_total_gain": 5.33412938520792e-06
+      },
+      {
+        "feature": "numeric__V231",
+        "total_gain": 2.2356460094451904,
+        "normalized_total_gain": 3.956735491833912e-06
+      },
+      {
+        "feature": "numeric__V194",
+        "total_gain": 1.3966349363327026,
+        "normalized_total_gain": 2.4718202248370217e-06
+      },
+      {
+        "feature": "numeric__V236",
+        "total_gain": 0.4870882034301758,
+        "normalized_total_gain": 8.620681333374763e-07
+      },
+      {
+        "feature": "numeric__V1",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V14",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V27",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V28",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V41",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V65",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V68",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V88",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V89",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V107",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V110",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V113",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V117",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V119",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V120",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V121",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V122",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V193",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V240",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V241",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V247",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V305",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "numeric__V325",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      },
+      {
+        "feature": "categorical__M1",
+        "total_gain": 0.0,
+        "normalized_total_gain": 0.0
+      }
+    ],
+    "limitations": "Associational, not causal; feature availability unknown; suspicious names in leakage_audit"
+  },
+  "bootstrap": {
+    "requested_replicates": 0,
+    "seed": 42,
+    "replicates_completed": 0,
+    "replicates_skipped_single_class": 0,
+    "intervals": null,
+    "interpretation": "conditional IID row resampling of fixed predictions; not entity/temporal/causal confidence intervals"
+  },
+  "warnings": [],
+  "runtime_seconds": 204.81673219997901,
+  "limitations": [
+    "No verified entity grouping; repeated-card dependence possible",
+    "Final holdout not used for tuning, thresholds or review-budget selection",
+    "Train CSV loaded fully; label checks and split feasibility inspect labels before final metric lock",
+    "No row-level records, IDs or predictions persisted; competition test outcomes unavailable"
+  ]
 }

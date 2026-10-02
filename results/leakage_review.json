@@ -1,0 +1,439 @@
+{
+  "audit_type": "actual full-row selected-column mechanical and unverified-proxy audit",
+  "captured_at_utc": "2026-10-02T22:51:14.972467+00:00",
+  "git_sha": "7148defa53109f6e47cc6993d6fbc4bd55d9c3ef",
+  "python": "3.11.16",
+  "versions": {
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.2.0"
+  },
+  "resource_boundary": {
+    "selected_train_columns_initial": [
+      "TransactionID",
+      "TransactionDT",
+      "isFraud"
+    ],
+    "card_chunk_rows": 1000,
+    "test_chunk_rows": 10000,
+    "training_performed": false,
+    "full_predictor_matrix_loaded": false,
+    "selected_array_buffers_under_100mb_by_design": true,
+    "supplement_after_runner_completion": true,
+    "streaming_full_row_fingerprints": true,
+    "supplement_fingerprint_array_bytes": 18897280
+  },
+  "schema": {
+    "predictor_count": 392,
+    "duplicate_train_header_names": 0,
+    "duplicate_test_header_names": 0,
+    "feature_sets_aligned": true,
+    "feature_order_aligned": true,
+    "test_target_absent": true,
+    "suspicious_predictor_names": []
+  },
+  "partitions": {
+    "train": {
+      "rows": 354324,
+      "positives": 11988,
+      "prevalence": 0.03383344057980831,
+      "time_min": 86400,
+      "time_max": 8745772,
+      "distinct_timestamps": 342862,
+      "missing_ids": 0,
+      "duplicate_ids": 0
+    },
+    "calibration": {
+      "rows": 118108,
+      "positives": 4611,
+      "prevalence": 0.03904053916754157,
+      "time_min": 8745798,
+      "time_max": 12192842,
+      "distinct_timestamps": 115077,
+      "missing_ids": 0,
+      "duplicate_ids": 0
+    },
+    "evaluation": {
+      "rows": 118108,
+      "positives": 4064,
+      "prevalence": 0.034409184813899145,
+      "time_min": 12192900,
+      "time_max": 15811131,
+      "distinct_timestamps": 115410,
+      "missing_ids": 0,
+      "duplicate_ids": 0
+    }
+  },
+  "split_checks": {
+    "partition_count_sum": 590540,
+    "all_labeled_rows_assigned_once": true,
+    "strict_time_order": true,
+    "timestamp_ties_not_split": true,
+    "pairs": {
+      "train__calibration": {
+        "index_overlap": 0,
+        "id_overlap": 0
+      },
+      "train__evaluation": {
+        "index_overlap": 0,
+        "id_overlap": 0
+      },
+      "calibration__evaluation": {
+        "index_overlap": 0,
+        "id_overlap": 0
+      }
+    },
+    "labeled_file_unique_ids": 590540,
+    "finite_times": true,
+    "binary_target_both_classes_each_partition": true
+  },
+  "competition_test": {
+    "rows": 506691,
+    "time_min": 18403224,
+    "time_max": 34214345,
+    "missing_or_nonfinite_times": 0,
+    "missing_ids": 0,
+    "duplicate_ids": 0,
+    "id_overlap_with_labeled_file": 0,
+    "strictly_after_labeled_file": true
+  },
+  "card_tuple_proxy": {
+    "definition": "Exact complete raw card1..card6 tuple; rows with any missing component excluded. No verified entity/person/account identity. No group split.",
+    "partitions": {
+      "train": {
+        "complete_tuple_rows": 346809,
+        "excluded_missing_tuple_rows": 7515,
+        "distinct_complete_tuples": 11815
+      },
+      "calibration": {
+        "complete_tuple_rows": 116763,
+        "excluded_missing_tuple_rows": 1345,
+        "distinct_complete_tuples": 7003,
+        "rows_matching_train_complete_tuple": 115013,
+        "fraction_complete_rows_matching_train": 0.9850123754956621,
+        "fraction_all_partition_rows_matching_train": 0.9737951705218952
+      },
+      "evaluation": {
+        "complete_tuple_rows": 115926,
+        "excluded_missing_tuple_rows": 2182,
+        "distinct_complete_tuples": 6938,
+        "rows_matching_train_complete_tuple": 113953,
+        "fraction_complete_rows_matching_train": 0.9829805220571745,
+        "fraction_all_partition_rows_matching_train": 0.9648203339316558,
+        "rows_matching_calibration_complete_tuple": 112133,
+        "fraction_complete_rows_matching_calibration": 0.9672808515777306
+      }
+    },
+    "pairs": {
+      "train__calibration": {
+        "shared_distinct_complete_tuples": 5951
+      },
+      "train__evaluation": {
+        "shared_distinct_complete_tuples": 5831
+      },
+      "calibration__evaluation": {
+        "shared_distinct_complete_tuples": 4846
+      }
+    }
+  },
+  "mechanism_review": {
+    "implementation": "evaluation.py leakage_audit lines107-126, invoked before preprocessing/model fit line162",
+    "suspicious_names": "case-insensitive target,label,fraud,transactionid,prediction,post_outcome substring; suspicious or forbidden causes ValueError",
+    "exact_target_and_id_copy": "full-length nonmissing equality to isFraud or TransactionID; target also Series.equals; checks all predictors",
+    "actual_copy_result": "Completed full-run aggregate artifact independently read back: no forbidden target/ID-copy features, no suspicious names; check executes before model fitting. No independent full-column equality rescan.",
+    "preprocessing_fit_boundary": "source inspected: preprocessor.fit_transform on train; calibration/evaluation transformed only; numeric median and categorical imputation/vocabulary train-fitted",
+    "target_and_id_excluded_from_features": true
+  },
+  "duplicate_checks": {
+    "with_TransactionDT": {
+      "method": "128-bit BLAKE2 fingerprints of raw CSV predictor cell tuples; all matched candidates re-read and checked for exact tuple equality. Not a numeric-normalized pandas duplicate scan.",
+      "duplicate_rows_excluding_first": 3,
+      "duplicate_distinct_tuples": 3,
+      "hash_collision_groups": 0,
+      "cross_partition_duplicate_groups": 0,
+      "evaluation_rows_exactly_matching_train_predictors": 0,
+      "fingerprint_buffer_bytes_both_variants": 18897280
+    },
+    "without_TransactionDT": {
+      "method": "128-bit BLAKE2 fingerprints of raw CSV predictor cell tuples; all matched candidates re-read and checked for exact tuple equality. Not a numeric-normalized pandas duplicate scan.",
+      "duplicate_rows_excluding_first": 1503,
+      "duplicate_distinct_tuples": 1215,
+      "hash_collision_groups": 0,
+      "cross_partition_duplicate_groups": 463,
+      "evaluation_rows_exactly_matching_train_predictors": 192,
+      "fingerprint_buffer_bytes_both_variants": 18897280,
+      "fraction_evaluation_rows_exactly_matching_train_predictors": 0.0016256307786094084
+    },
+    "full_runner_pandas_exact_duplicates_with_time_parent_reported": 3
+  },
+  "provenance_boundary": {
+    "archive_hashes_and_official_sizes": "CSV byte hashes and full dimensions independently verified against the supplied local ZIP; independently signed official checksums unavailable.",
+    "no_rules_accepted": true,
+    "no_download": true,
+    "no_raw_rows_ids_keys_probabilities_serialized": true,
+    "official_field_source": "https://www.kaggle.com/c/ieee-fraud-detection/data",
+    "official_rules_source": "https://www.kaggle.com/competitions/ieee-fraud-detection/rules",
+    "sources_verified_via_web_search": false,
+    "official_fields": "Host field definitions could not be verified in this session: official data search returned Kaggle too-many-requests error pages. Do not substitute participant discussion or mirrors for host definitions.",
+    "rules_observed": "Official rules search returned Kaggle too-many-requests error page; applicable data use/publication terms remain unverified by this subaudit. No acceptance, download, or publication permission inferred.",
+    "web_search_attempts": "Official Kaggle data/rules URLs searched; native backend unavailable, fallback yielded dynamic error pages. Participant result about V fields not treated as host authority."
+  },
+  "uncertainties": [
+    "No point-in-time availability established for C,D,M,V fields; anonymized semantics insufficient.",
+    "Fraud label adjudication/maturity delay unknown; no maturity embargo verified.",
+    "Strict nonoverlapping time support does not eliminate repeated-proxy dependence or hidden look-ahead.",
+    "Complete card tuples are unverified proxies, not guaranteed entities.",
+    "Full-file target validation and per-partition prevalence access labels: holdout is not physically label-sealed."
+  ],
+  "leakage_absence_claim": false,
+  "numeric_target_complement_audit": {
+    "rows_scanned": 590540,
+    "predictor_columns_examined": 392,
+    "definition": "finite numeric full-column exact equality x == 1-isFraud; missing/non-numeric values disqualify",
+    "matched_features": [],
+    "not_general_target_encoding_detector": true
+  },
+  "known_top_feature_id_affine_audit": {
+    "rows_scanned": 590540,
+    "features": [
+      "V258",
+      "C14",
+      "C1",
+      "C13",
+      "TransactionDT",
+      "card1"
+    ],
+    "definition": "nonconstant finite x with exact float arithmetic cross-multiplied affine relation to TransactionID, all rows; not arbitrary nonlinear ID proxies",
+    "matched_features": []
+  },
+  "top_feature_review": {
+    "source": "Completed results/current_evaluation.json aggregate artifact independently read back; selected columns independently scanned",
+    "normalized_total_gain": {
+      "V258": 0.10129212656016581,
+      "C14": 0.04751743572449454,
+      "C1": 0.047279039673733946,
+      "C13": 0.040483525091975545,
+      "TransactionDT": 0.03548315012517151,
+      "card1": 0.03247071324983452
+    },
+    "classification": {
+      "V258": "Opaque anonymized derived field; decision-time availability and construction window unverified. High importance is not evidence of leakage or causality.",
+      "C14": "Opaque count-like family; aggregation lookback and point-in-time construction unverified.",
+      "C1": "Opaque count-like family; aggregation lookback and point-in-time construction unverified.",
+      "C13": "Opaque count-like family; aggregation lookback and point-in-time construction unverified.",
+      "TransactionDT": "Observed chronological variable; strict ranges verified, native units only, no inferred calendar origin. Can capture cohort drift; no maturity embargo established.",
+      "card1": "Observed card attribute/proxy; entity semantics unverified. Complete tuple recurrence is high, not a person guarantee."
+    },
+    "selected_column_partition_summaries": {
+      "V258": {
+        "train": {
+          "missing": 264730,
+          "finite": 89594,
+          "min": 1.0,
+          "max": 66.0
+        },
+        "calibration": {
+          "missing": 97767,
+          "finite": 20341,
+          "min": 0.0,
+          "max": 36.0
+        },
+        "evaluation": {
+          "missing": 97613,
+          "finite": 20495,
+          "min": 0.0,
+          "max": 24.0
+        }
+      },
+      "C14": {
+        "train": {
+          "missing": 0,
+          "finite": 354324,
+          "min": 0.0,
+          "max": 1429.0
+        },
+        "calibration": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 0.0,
+          "max": 711.0
+        },
+        "evaluation": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 0.0,
+          "max": 798.0
+        }
+      },
+      "C1": {
+        "train": {
+          "missing": 0,
+          "finite": 354324,
+          "min": 0.0,
+          "max": 4685.0
+        },
+        "calibration": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 0.0,
+          "max": 1334.0
+        },
+        "evaluation": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 0.0,
+          "max": 1505.0
+        }
+      },
+      "C13": {
+        "train": {
+          "missing": 0,
+          "finite": 354324,
+          "min": 0.0,
+          "max": 2918.0
+        },
+        "calibration": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 0.0,
+          "max": 945.0
+        },
+        "evaluation": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 0.0,
+          "max": 925.0
+        }
+      },
+      "TransactionDT": {
+        "train": {
+          "missing": 0,
+          "finite": 354324,
+          "min": 86400.0,
+          "max": 8745772.0
+        },
+        "calibration": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 8745798.0,
+          "max": 12192842.0
+        },
+        "evaluation": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 12192900.0,
+          "max": 15811131.0
+        }
+      },
+      "card1": {
+        "train": {
+          "missing": 0,
+          "finite": 354324,
+          "min": 1000.0,
+          "max": 18396.0
+        },
+        "calibration": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 1004.0,
+          "max": 18395.0
+        },
+        "evaluation": {
+          "missing": 0,
+          "finite": 118108,
+          "min": 1004.0,
+          "max": 18395.0
+        }
+      }
+    },
+    "no_causal_claim": true,
+    "V258_missing_fractions": {
+      "train": 0.747141034759147,
+      "calibration": 0.8277762725640939,
+      "evaluation": 0.8264723812104176
+    }
+  },
+  "supplement_completed_at_utc": "2026-10-02T22:56:25.577343+00:00",
+  "full_runner_aggregate_readback": {
+    "status": "completed",
+    "warnings": [],
+    "runtime_seconds": 204.81673219997901,
+    "exact_predictor_duplicates_with_time": 3,
+    "known_forbidden_features": [],
+    "suspicious_feature_names": [],
+    "preprocessing_fit_partition": "model_train only",
+    "baseline_scaler_fit_partition": "model_train only",
+    "review_budgets": {
+      "logistic_regression": [
+        {
+          "budget_fraction": 0.005,
+          "alerts": 591,
+          "tp": 4,
+          "fp": 587,
+          "precision": 0.00676818950930626,
+          "recall": 0.000984251968503937,
+          "threshold": 1.0,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.01,
+          "alerts": 1182,
+          "tp": 34,
+          "fp": 1148,
+          "precision": 0.028764805414551606,
+          "recall": 0.008366141732283465,
+          "threshold": 0.9999999999987745,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.02,
+          "alerts": 2363,
+          "tp": 724,
+          "fp": 1639,
+          "precision": 0.3063901819720694,
+          "recall": 0.1781496062992126,
+          "threshold": 0.8069873824494056,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        }
+      ],
+      "xgboost": [
+        {
+          "budget_fraction": 0.005,
+          "alerts": 591,
+          "tp": 548,
+          "fp": 43,
+          "precision": 0.9272419627749577,
+          "recall": 0.13484251968503938,
+          "threshold": 0.9651979804039001,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.01,
+          "alerts": 1182,
+          "tp": 1029,
+          "fp": 153,
+          "precision": 0.8705583756345178,
+          "recall": 0.2531988188976378,
+          "threshold": 0.7713785767555237,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        },
+        {
+          "budget_fraction": 0.02,
+          "alerts": 2363,
+          "tp": 1551,
+          "fp": 812,
+          "precision": 0.6563690224291155,
+          "recall": 0.38164370078740156,
+          "threshold": 0.33907562494277954,
+          "interpretation": "descriptive only; stable evaluation-row ties, not deployable policy"
+        }
+      ]
+    },
+    "interpretation": "Poor logistic top-capacity performance and saturated cutoff verified; drift and ordinal geometry are plausible hypotheses, not established causes. No retuning or model rerun."
+  },
+  "input_sha256": {
+    "train_transaction.csv": "3a5c83ab6b3cc13dcabe5ffa9f522307fd5f7f7b6e6f6a60c32284ca6283d642",
+    "test_transaction.csv": "2a8e51f1d335a86025d2b7f45beb9b78d0ab1edd726ef531d8b71a8a0065c011"
+  }
+}

@@ -1,8 +1,8 @@
-# Phase 2 evaluation protocol — execution prepared, empirical study blocked
+# Phase 2 evaluation protocol — completed empirical execution
 
 ## Evidence boundary
 
-No authorized IEEE-CIS transaction files are present in this checkout. No current full-data result is established. The existing README and notebook retain their corrected-workflow/historical-score boundary; they must not acquire current-results claims until an actual authorized run succeeds. Synthetic test outputs validate implementation only and are never published as IEEE performance.
+The predeclared protocol below was executed successfully on the full local IEEE-CIS transaction files. See `../results/current_evaluation.json` for authoritative current metrics/provenance and `../results/current_evaluation.md` for interpretation. Restricted data remains external to this checkout. Historical results and synthetic checks are not current empirical evidence. The notebook now replays only current aggregate outputs; its former demonstration is retained in Git history.
 
 `results/current_evaluation.json` is a status/provenance record. A blocked record has no dataset counts, empirical metrics, calibration conclusion, operational results, or feature ranking. A successful run must be explicitly identified as full IEEE transaction-table evaluation, not a sampled or synthetic substitute. Do not overwrite a completed result merely to accommodate another run.
 
@@ -60,7 +60,7 @@ No benchmark score establishes hosted deployment, operational effectiveness, pro
 
 Use the committed locked Python environment. Record actual Git execution SHA and clean/dirty state, source-file hashes, Python/library versions, UTC evaluation timestamp, input file names/hashes, full-file counts/prevalence, split method/seed/boundaries/index hashes, parameters, calibration decision, runtime and aggregate results. Hashes establish byte/source identity, not lawfulness or empirical correctness by themselves. Never infer an empirical run from the presence of a JSON file; validate its status and dataset kind.
 
-CI uses small synthetic fixtures and schema/parser checks only. Restricted files and row-level derived artifacts must stay out of Git and GitHub Actions. README current-results and notebook final tables/interpretation are deferred until actual empirical completion.
+CI uses small synthetic fixtures and schema/parser checks only. Restricted files and row-level derived artifacts must stay out of Git and GitHub Actions. Current README/notebook result claims were updated only after successful full-data execution.
 
 ### Authorized local execution
 
@@ -70,8 +70,8 @@ From the repository root, keep both CSVs in a separate authorized data directory
 uv sync --locked --no-dev --extra notebook
 uv run --no-sync python scripts/verify_environment.py
 uv run --no-sync python -m unittest discover -s tests -v
-uv run --no-sync python evaluation.py --data-dir /path/to/authorized/ieee --output results/current_evaluation.json --split temporal --n-jobs 4 --bootstrap-replicates 0 --acknowledge-uncertain-feature-timing --overwrite
-uv run --no-sync python scripts/validate_results.py results/current_evaluation.json
+uv run --no-sync python evaluation.py --data-dir /path/to/authorized/ieee --output /path/to/new_evaluation.json --split temporal --n-jobs 4 --bootstrap-replicates 0 --acknowledge-uncertain-feature-timing
+uv run --no-sync python scripts/validate_results.py /path/to/new_evaluation.json
 ```
 
 `--overwrite` permits replacing the committed **blocked** status record only; completed evidence is protected. For another completed run choose a new output filename. Missing CSVs produce exit code **2**, `BLOCKED ON DATA`, and null metrics/counters. Other failed checks refuse publication. The parser verifies structural consistency, not truth of input provenance or completeness against an independently verified official release. The runner reads all rows of the supplied training CSV; a user must establish that these are the original full official files, not renamed samples. Windows paths should use native forward slashes, for example `D:/datasets/ieee`.
