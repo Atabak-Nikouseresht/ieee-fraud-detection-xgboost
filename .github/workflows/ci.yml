@@ -32,5 +32,7 @@ jobs:
         run: uv run --no-sync python -m unittest discover -s tests -v
       - name: Compile Python sources
         run: uv run --no-sync python -m compileall -q fraud_detection.py scripts tests
-      - name: Audit locked dependencies
-        run: uvx --from pip-audit pip-audit -r requirements.txt
+      - name: Export all locked dependencies for audit
+        run: uv export --locked --no-dev --extra notebook --no-emit-project --output-file $RUNNER_TEMP/requirements-audit.txt
+      - name: Audit runtime and notebook dependencies
+        run: uvx --from pip-audit pip-audit -r $RUNNER_TEMP/requirements-audit.txt
